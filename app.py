@@ -141,10 +141,34 @@ def style_dataframe(df):
 
     numeric_cols = ['조회수', '좋아요수', '채널구독자수']
 
+    def make_clickable(url_str):
+        # return f'<a href="{url_str}" target="_blank">{url_str}</a>' # <-- 기존 코드
+        return f'<a href="{url_str}" target="_blank">영상보러가기</a>' # <-- 수정된 코드
+    
+    # 1. 정렬을 먼저 수행합니다.
+    if '조회수' in df.columns:
+        df_sorted = df.sort_values(by='조회수', ascending=False).reset_index(drop=True)
+    else:
+        df_sorted = df.reset_index(drop=True) # 정렬할 게 없어도 인덱스 리셋
+
+    # 2. 정렬이 완료된 데이터프레임을 복사합니다.
+    df_to_style = df_sorted.copy()
+    
+    # 3. 복사본에 링크 서식을 적용합니다.
+    df_to_style['유튜브 링크'] = df_to_style['유튜브 링크'].apply(make_clickable)
+
+    numeric_cols = ['조회수', '좋아요수', '채널구독자수']
+
+    # --- ▼▼▼ 이 아랫부분을 수정(교체)합니다 ▼▼▼ ---
     # 4. 스타일을 적용합니다.
     styled = df_to_style.style \
         .hide(axis="index") \
-        .format(subset=numeric_cols, formatter='{:,}') \
+        .format(
+            # 값이 숫자인 경우(int, float)에만 콤마 서식을 적용하고,
+            # '비공개' 같은 문자열은 그대로 둡니다.
+            formatter=lambda x: f"{x:,}" if isinstance(x, (int, float)) else x, 
+            subset=numeric_cols
+        ) \
         .set_properties(
             subset=numeric_cols, **{'text-align': 'right'} # 1. 숫자 우측 정렬
         ) \
@@ -157,6 +181,7 @@ def style_dataframe(df):
         .set_table_styles([
             {'selector': 'th', 'props': [('text-align', 'center')]} # 4. 헤더 중앙 정렬
         ])
+    # --- ▲▲▲ 여기까지 수정(교체)합니다 ▲▲▲ ---
     
     return styled
 
