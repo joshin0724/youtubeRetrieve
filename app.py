@@ -127,9 +127,18 @@ def style_dataframe(df):
     styled = df_to_style.style \
         .hide(axis="index") \
         .format(subset=numeric_cols, formatter='{:,}') \
-        .set_properties(subset=numeric_cols, **{'text-align': 'right'}) \
-        .set_properties(subset=['영상 제목', '유튜브 링크'], **{'text-align': 'left'}) \
-        .set_table_styles([{'selector': 'th', 'props': [('text-align', 'center')]}])
+        .set_properties(
+            subset=numeric_cols, **{'text-align': 'right'} # 1. 숫자 우측 정렬
+        ) \
+        .set_properties(
+            subset=['채널명'], **{'text-align': 'center'} # 2. 채널명 중앙 정렬
+        ) \
+        .set_properties(
+            subset=['영상 제목', '유튜브 링크'], **{'text-align': 'left'} # 3. 영상 제목/링크 좌측 정렬
+        ) \
+        .set_table_styles([
+            {'selector': 'th', 'props': [('text-align', 'center')]} # 4. 헤더 중앙 정렬
+        ])
     # --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
     
     return styled
@@ -157,65 +166,14 @@ if st.button("검색 실행") or st.session_state.get("run_search"):
             if results_df.empty:
                 st.error("검색 결과가 없습니다.")
             else:
-                # 1. 첫 열 (인덱스) 삭제 및 스타일링 적용
-                # 2. 반응형 테이블 및 컬럼 사이즈 조절 (st.dataframe 활용)
-                #    st.dataframe은 자동으로 반응형을 지원합니다.
-                #    컬럼 너비는 "column_config"로 조절할 수 있습니다.
-
-                # 조회수, 좋아요수, 구독자수 포매터 함수
-                def format_numeric(value):
-                    if isinstance(value, (int, float)):
-                        return f"{value:,}"
-                    return value
-
-                st.dataframe(
-                    results_df,
-                    use_container_width=True, # 부모 컨테이너 너비에 맞춰 자동 조절
-                    hide_index=True, # 첫 열(인덱스) 삭제
-                    column_config={
-                        "유튜브 링크": st.column_config.LinkColumn(
-                            "유튜브 링크",
-                            help="클릭 시 유튜브 영상으로 이동합니다.",
-                            display_text="유튜브 링크", # 컬럼에 표시될 텍스트
-                        ),
-                        "영상 제목": st.column_config.Column(
-                            "영상 제목",
-                            width="large", # 너비 조절 (small, medium, large, custom)
-                        ),
-                        "조회수": st.column_config.NumberColumn(
-                            "조회수",
-                            format="%d", # 천단위 콤마는 아래에서 직접 적용
-                        ),
-                        "좋아요수": st.column_config.NumberColumn(
-                            "좋아요수",
-                            format="%d",
-                        ),
-                        "채널명": st.column_config.Column(
-                            "채널명",
-                            width="medium",
-                        ),
-                        "채널구독자수": st.column_config.NumberColumn(
-                            "채널구독자수",
-                            format="%d",
-                        ),
-                        "영상업로드 일자": st.column_config.DateColumn(
-                            "영상업로드 일자",
-                            format="YYYY-MM-DD",
-                        ),
-                    }
-                )
-
-                # st.dataframe은 셀 정렬이나 숫자 콤마 포맷팅을 column_config 내에서 직접적으로 지원하지 않아,
-                # 필요시 수동 포맷팅 로직을 추가해야 합니다.
-                # 그러나 st.dataframe은 기본적으로 LinkColumn 등을 통해 유용한 기능을 제공합니다.
-
-                # Styler를 사용한 기존 방식은 반응형 테이블이 아니며,
-                # Streamlit의 최신 st.dataframe 기능과 함께 사용하기 어렵습니다.
-                # 따라서, st.dataframe의 기본 스타일링을 활용하는 것을 권장합니다.
+                # --- ▼▼▼ 이 아랫부분을 교체하세요 ▼▼▼ ---
                 
-                # 만약 이전 Styler 방식의 세밀한 정렬과 포맷팅이 꼭 필요하다면,
-                # st.dataframe 대신 df.style.to_html(escape=False)를 사용해야 하며,
-                # 이 경우 반응형과 컬럼 사이즈 조절은 CSS를 직접 추가해야 하는 어려움이 있습니다.
-                # 여기서는 st.dataframe의 장점을 살린 방식으로 제공합니다.
+                # 1. 위에서 수정한 style_dataframe 함수로 스타일 적용
+                styled_results = style_dataframe(results_df)
+
+                # 2. HTML로 변환하여 출력 (st.dataframe 대신 다시 이 방법 사용)
+                st.write(styled_results.to_html(escape=False), unsafe_allow_html=True)
+
+                # --- ▲▲▲ 여기까지 교체하세요 ▲▲▲ ---
 
 # (%%writefile app.py 명령어가 이 줄에서 종료됩니다)
