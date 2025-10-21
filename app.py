@@ -123,12 +123,14 @@ def style_dataframe(df):
 
     numeric_cols = ['조회수', '좋아요수', '채널구독자수']
 
+    # --- ▼▼▼ 이 코드로 덮어쓰세요 ▼▼▼ ---
     styled = df_to_style.style \
-        .hide(axis="index") \ # <-- 이 줄을 추가하여 첫 열(인덱스)을 숨깁니다.
+        .hide(axis="index") \
         .format(subset=numeric_cols, formatter='{:,}') \
         .set_properties(subset=numeric_cols, **{'text-align': 'right'}) \
         .set_properties(subset=['영상 제목', '유튜브 링크'], **{'text-align': 'left'}) \
         .set_table_styles([{'selector': 'th', 'props': [('text-align', 'center')]}])
+    # --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
     
     return styled
 
