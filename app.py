@@ -95,14 +95,14 @@ def search_youtube_videos(search_term):
             
             channel_data = channel_stats.get(current_channel_id, {})
             
-            row = {
-                '유튜브 링크': snippet_data.get('유튜브 링크'),
+            row = {                
                 '영상 제목': snippet_data.get('영상 제목'),
                 '조회수': stats_data.get('조회수', 0),
                 '좋아요수': stats_data.get('좋아요수', '비공개'),
                 '채널명': snippet_data.get('채널명'),
                 '채널구독자수': channel_data.get('채널구독자수', '비공개'),
-                '영상업로드 일자': snippet_data.get('영상업로드 일자')
+                '영상업로드 일자': snippet_data.get('영상업로드 일자'),
+                '유튜브 링크': snippet_data.get('유튜브 링크')
             }
             final_data.append(row)
 
