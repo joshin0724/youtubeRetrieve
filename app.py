@@ -122,11 +122,14 @@ def style_dataframe(df):
     df_to_style['유튜브 링크'] = df_to_style['유튜브 링크'].apply(make_clickable)
 
     numeric_cols = ['조회수', '좋아요수', '채널구독자수']
+
+    # --- ▼▼▼ 이 코드로 덮어쓰세요 ▼▼▼ ---
     styled = df_to_style.style \
         .format(subset=numeric_cols, formatter='{:,}') \
         .set_properties(subset=numeric_cols, **{'text-align': 'right'}) \
         .set_properties(subset=['영상 제목', '유튜브 링크'], **{'text-align': 'left'}) \
-        .set_table_styles([{'selector': 'th', 'props': [('text-align': 'center')]}])
+        .set_table_styles([{'selector': 'th', 'props': [('text-align', 'center')]}]) # <-- ( ) 괄호 안에 콤마(,)가 맞습니다.
+    # --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
     
     return styled
 
