@@ -4,6 +4,8 @@ import pandas as pd
 from googleapiclient.discovery import build
 from datetime import datetime, timedelta
 
+st.set_page_config(layout="wide")
+
 # -----------------------------------------------
 # 1. API 키 설정
 # -----------------------------------------------
