@@ -121,6 +121,9 @@ def style_dataframe(df):
     df_to_style = df.copy()
     df_to_style['유튜브 링크'] = df_to_style['유튜브 링크'].apply(make_clickable)
 
+    if '조회수' in df.columns:
+            df = df.sort_values(by='조회수', ascending=False).reset_index(drop=True)
+
     numeric_cols = ['조회수', '좋아요수', '채널구독자수']
 
     # --- ▼▼▼ 이 코드로 덮어쓰세요 ▼▼▼ ---
