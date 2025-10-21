@@ -39,12 +39,16 @@ def search_youtube_videos(search_term):
             q=search_term,
             part='snippet',
             type='video',
-            maxResults=50,
+            # --- ▼▼▼ 이 아랫부분을 수정(교체)합니다 ▼▼▼ ---
+            maxResults=50, # <-- 10에서 50으로 변경
+            # --- ▲▲▲ 여기까지 수정(교체)합니다 ▲▲▲ ---
             order='viewCount',
             publishedAfter=one_year_ago
         ).execute()
 
         video_ids, channel_ids, video_snippets = [], [], {}
+        # (이하 코드는 동일합니다)
+        ...
         for item in search_response.get('items', []):
             video_id = item['id']['videoId']
             channel_id = item['snippet']['channelId']
