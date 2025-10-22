@@ -30,7 +30,7 @@ div[data-testid="stTextInput"] input {
     background-color: #ffffff !important; 
 }
 
-/* --- (수정) 1, 2. YouTube 스타일 검색창 (버튼) --- */
+/* --- (유지) 1, 2. YouTube 스타일 검색창 (버튼) --- */
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     border-radius: 0 20px 20px 0; 
     border: 1px solid #ccc;       
@@ -38,20 +38,33 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2
     background-color: #ffffff !important; 
     color: #333;                 
     height: 40px;
-    width: 100%; /* (★신규★) 버튼이 그리드 셀을 꽉 채우도록 설정 */
-    /* margin-left: -9px; */  /* (삭제) 그리드가 처리하므로 마진 삭제 */
+    width: 100%; /* 부모 컬럼을 꽉 채움 */
 }
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
     background-color: #f8f8f8 !important; 
     color: #333;
 }
 
-/* --- (유지) 3. 검색창/버튼 강제 병합 (모바일/데스크톱 공통) --- */
+/* --- (신규) 3. 검색창/버튼 강제 병합 (Flexbox) --- */
+/* 검색창(col1)과 버튼(col2)을 감싸는 부모(stHorizontalBlock) */
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] {
-    display: grid !important;
-    grid-template-columns: 5fr 1fr !important; /* 5:1 비율 강제 */
-    gap: 0 !important; /* 컬럼 사이 갭 제거 (핵심) */
+    display: flex !important;
+    flex-wrap: nowrap !important; /* 모바일에서 줄바꿈(wrap) 방지 (핵심) */
+    gap: 0 !important; /* 틈새 제거 */
 }
+/* 첫 번째 컬럼 (검색창) - 남은 공간 모두 차지 */
+div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] div[data-testid="stColumn"]:nth-child(1) {
+    flex-grow: 1 !important;
+    flex-shrink: 1 !important;
+    min-width: 0; /* 너비가 줄어들 수 있도록 허용 */
+}
+/* 두 번째 컬럼 (버튼) - 크기 고정 */
+div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] div[data-testid="stColumn"]:nth-child(2) {
+    flex-grow: 0 !important;
+    flex-shrink: 0 !important;
+    flex-basis: 70px !important; /* 버튼 너비 약 70px로 고정 */
+}
+/* --- (신규 블록 끝) --- */
 
 
 /* --- (유지) 카드 UI 스타일 --- */
@@ -79,6 +92,7 @@ div[data-testid="stMetricValue"] {
 }
 </style>
 """, unsafe_allow_html=True)
+# --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
 # --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
 
 # -----------------------------------------------
