@@ -201,14 +201,15 @@ def search_youtube_videos(search_term):
 # (신규) 이미지가 포함된 제목 (중앙 정렬은 CSS가 처리)
 # (주의: 'image_87f5da.png' 파일이 GitHub 저장소에 app.py와 함께 있어야 합니다.)
 st.markdown(
-    """
+    f"""
     <h1>
-        <img src="youtube_logo.PNG" width="130" style="vertical-align:middle; margin-right:10px; margin-bottom:5px;">
+        <img src="https://github.com/joshin0724/youtubeRetrieve/blob/3b327bd0faa1a37afe0af9b11ba2d84b1ad72ebb/youtube_logo.PNG" width="130" style="vertical-align:middle; margin-right:10px; margin-bottom:5px;">
         유튜브 검색 결과 조회
     </h1>
     """,
     unsafe_allow_html=True
 )
+
 
 
 # 2. 검색창 중앙 정렬을 위한 3단 컬럼 (좌/중앙/우)
