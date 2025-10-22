@@ -11,11 +11,9 @@ st.set_page_config(layout="wide")
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 # -----------------------------------------------
 
-# --- ▼▼▼ 이 CSS 블록 전체를 덮어쓰세요 ▼▼▼ ---
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 st.markdown("""
 <style>
-
 h1 {
     text-align: center;
 }
@@ -27,8 +25,6 @@ div[data-testid="stTextInput"] input {
     padding-left: 15px;
     font-size: 1rem;
 }
-
-/* --- (수정) 1. YouTube 스타일 검색창 (버튼) --- */
 
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     border-radius: 0 20px 20px 0; /* 오른쪽 둥글게 */
@@ -43,9 +39,6 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2
     background-color: #f0f0f0;    /* 호버 시 약간 어둡게 */
     color: #333;
 }
-
-
-/* --- (유지) 카드 UI 스타일 --- */
 
 /* Result video titles (H3) */
 .stMarkdown h3 a {
@@ -197,10 +190,10 @@ def search_youtube_videos(search_term):
 # 4. 웹페이지 구성
 # -----------------------------------------------
 
-st.title("🔍 유튜브 검색 결과 조회") # <-- 이 줄을 삭제하고,
+st.title("🔍 유튜브 검색 결과 조회")
 
 
-# 2. 검색창 중앙 정렬을 위한 3단 컬럼 (좌/중앙/우)
+# 검색창 중앙 정렬을 위한 3단 컬럼 (좌/중앙/우)
 left_space, main_search, right_space = st.columns([1, 3, 1])
 
 # 중앙(main_search) 컬럼에 검색창과 버튼을 배치
@@ -218,7 +211,7 @@ with main_search:
         )
 
     with col2:
-        run_button = st.button("🔍") # 1. 버튼 텍스트를 아이콘으로 변경
+        run_button = st.button("🔍") 
     
     st.markdown(
         """
@@ -246,11 +239,11 @@ if run_button or st.session_state.get("run_search"):
                 # 조회수 순으로 정렬 (데이터프레임 자체를 정렬)
                 results_df_sorted = results_df.sort_values(by='조회수', ascending=False).reset_index(drop=True)
 
-                # 4. 반응형 카드 레이아웃 (st.columns는 모바일에서 자동으로 수직 정렬됨)
+                # 반응형 카드 레이아웃 (st.columns는 모바일에서 자동으로 수직 정렬됨)
                 for index, row in results_df_sorted.iterrows():
                     st.write("---") # 구분선
                     
-                    # 1. 썸네일 컬럼 | 2. 정보 컬럼
+                    # 썸네일 컬럼 | 2. 정보 컬럼
                     c1, c2 = st.columns([1, 3]) 
                     
                     with c1:
@@ -258,13 +251,13 @@ if run_button or st.session_state.get("run_search"):
                         st.image(row['썸네일'], use_container_width=True)
 
                     with c2:
-                        # 1. 톤앤매너: 클릭 가능한 제목 (CSS 적용됨)
+                        # 톤앤매너: 클릭 가능한 제목 (CSS 적용됨)
                         st.markdown(f"### [{row['영상 제목']}]({row['유튜브 링크']})")
                         
                         # 채널명 및 업로드 날짜
                         st.caption(f"{row['채널명']}  ·  {row['영상업로드 일자']}")
 
-                        # 1. 톤앤매너: 통계 정보를 Metric 카드로 표시
+                        # 톤앤매너: 통계 정보를 Metric 카드로 표시
                         stats_cols = st.columns(3)
                         
                         # '비공개' 문자열 처리를 위한 함수
