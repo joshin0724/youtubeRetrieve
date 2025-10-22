@@ -10,8 +10,8 @@ st.set_page_config(layout="wide")
 # -----------------------------------------------
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 # -----------------------------------------------
-# --- ▼▼▼ 이 CSS 블록 전체를 덮어쓰세요 ▼▼▼ ---
-# 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
+
+
 st.markdown("""
 <style>
 /* --- (유지) 2. 페이지 제목 중앙 정렬 --- */
@@ -30,8 +30,7 @@ div[data-testid="stTextInput"] input {
     background-color: #ffffff !important; 
 }
 
-/* --- (수정) 1, 2. YouTube 스타일 검색창 (버튼) --- */
-/* 버튼이 부모(컬럼)의 너비를 100% 채우도록 함 */
+/* --- (유지) 1, 2. YouTube 스타일 검색창 (버튼 - 데스크톱) --- */
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     border-radius: 0 20px 20px 0; 
     border: 1px solid #ccc;       
@@ -39,32 +38,30 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2
     background-color: #ffffff !important; 
     color: #333;                 
     height: 40px;
-    width: 100% !important; /* (★수정★) 버튼이 컬럼 너비를 100% 채우도록 */
+    margin-left: -9px;           /* 데스크톱에서 붙이기 */
 }
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
     background-color: #f8f8f8 !important; 
     color: #333;
 }
 
-/* --- (신규) 3. 검색창/버튼 강제 병합 (Flexbox - 최종 시도) --- */
-/* 검색창(col1)과 버튼(col2)을 감싸는 부모(stHorizontalBlock) */
-div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] {
-    display: flex !important;
-    flex-wrap: nowrap !important; /* 모바일에서 줄바꿈(wrap) 방지 (핵심) */
-    gap: 0 !important; /* 틈새 제거 */
+/* --- (신규 수정) 3. 모바일 반응형 수정 (컬럼 유지) --- */
+@media (max-width: 640px) {
+    /* 5:1 컬럼을 감싸는 부모(HorizontalBlock) */
+    div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] {
+        display: grid !important;
+        grid-template-columns: 5fr 1fr !important; /* 5:1 비율 강제 */
+        gap: 0 !important; /* 컬럼 사이 갭 제거 */
+    }
+
+    /* (신규) 모바일에서 버튼의 마진을 0으로 리셋 */
+    div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
+        margin-left: 0px !important; 
+        border-radius: 0 20px 20px 0 !important;
+        border: 1px solid #ccc !important;
+        border-left: none !important;
+    }
 }
-/* 첫 번째 컬럼 (검색창) - 남은 공간 모두 차지 */
-/* (수정) :first-child 선택자 사용 */
-div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] > div:first-child {
-    flex: 1 1 auto !important; /* (★수정★) 남은 공간 모두 차지 */
-    min-width: 0; /* 너비가 줄어들 수 있도록 허용 */
-}
-/* 두 번째 컬럼 (버튼) - 크기 고정 */
-/* (수정) :last-child 선택자 사용 */
-div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] > div:last-child {
-    flex: 0 0 50px !important; /* (★수정★) 버튼 컬럼 너비를 50px로 고정 */
-}
-/* --- (신규 블록 끝) --- */
 
 
 /* --- (유지) 카드 UI 스타일 --- */
@@ -92,7 +89,7 @@ div[data-testid="stMetricValue"] {
 }
 </style>
 """, unsafe_allow_html=True)
-# --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
+
 # -----------------------------------------------
 # 2. API  설정
 # -----------------------------------------------
