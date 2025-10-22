@@ -196,7 +196,12 @@ def search_youtube_videos(search_term):
 # 4. 웹페이지 구성
 # -----------------------------------------------
 
-st.title("🔍 유튜브 검색 결과 조회") 
+#st.title("🔍 유튜브 검색 결과 조회") 
+
+<h1>
+        <img src="image_87f5da.png" width="130" style="vertical-align:middle; margin-right:10px; margin-bottom:5px;">
+        유튜브 검색 결과 조회
+</h1>
 
 
 # 2. 검색창 중앙 정렬을 위한 3단 컬럼 (좌/중앙/우)
