@@ -11,39 +11,6 @@ st.set_page_config(layout="wide")
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 # -----------------------------------------------
 
-st.markdown("""
-<style>
-/* --- (신규) 2. 페이지 제목 중앙 정렬 --- */
-h1 {
-    text-align: center;
-}
-
-/* --- (신규) 1. YouTube 스타일 검색창 (입력란) --- */
-div[data-testid="stTextInput"] input {
-    border-radius: 20px 0 0 20px; /* 왼쪽 둥글게 */
-    border: 1px solid #ccc;       /* 회색 테두리 */
-    border-right: none;          /* 오른쪽 테두리 제거 (버튼과 붙이기 위해) */
-    height: 40px;                /* 높이 고정 */
-    padding-left: 15px;
-    font-size: 1rem;
-}
-네, CSS 스타일이 깨지고 검색창이 중앙 정렬되지 않는 문제를 확인했습니다.
-
-이전 st.columns([5, 1]) 레이아웃은 페이지 전체 너비(layout="wide")를 기준으로 5:1로 분할하기 때문에, 검색창이 너무 길어지고 버튼과 분리되어 스타일이 깨진 것입니다.
-
-해결책은 3단 컬럼을 만들어 검색창을 중앙에 배치하는 것입니다.
-
-app.py 파일의 2개 부분을 아래와 같이 수정(교체)해 주세요.
-
-1. import 문 바로 아랫부분 (CSS 교체)
-st.markdown("""...""") CSS 블록 전체를 아래의 수정된 코드로 덮어쓰기(교체)해 주세요.
-
-변경점:
-
-검색 버튼 CSS 선택자를 nth-child(2) (페이지의 두 번째 컬럼)에서, 중앙 컬럼(nth-child(2)) 내부의 두 번째 컬럼(nth-child(2))으로 더 구체화했습니다.
-
-Python
-
 # --- ▼▼▼ 이 CSS 블록 전체를 덮어쓰세요 ▼▼▼ ---
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 st.markdown("""
@@ -78,6 +45,7 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2
     background-color: #f0f0f0;    /* 호버 시 약간 어둡게 */
     color: #333;
 }
+
 
 /* --- (유지) 카드 UI 스타일 --- */
 
