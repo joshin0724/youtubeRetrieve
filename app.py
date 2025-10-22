@@ -225,7 +225,7 @@ with main_search:
     st.markdown(
         """
         <p style='text-align: left; font-weight: bold; font-size: 1rem;'>
-        최근 1년 영상 중 가장 인기 있는(조회수) 순서로 보여드려요! 📈
+        검색어와 연관성이 높고, 최근 1년 영상 중 가장 인기 있는(조회수) 순서로 보여드려요! 📈
         </p>
         """,
         unsafe_allow_html=True
