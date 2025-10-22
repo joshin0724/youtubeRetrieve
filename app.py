@@ -221,8 +221,8 @@ with main_search:
     
     st.markdown(
         """
-        <p style='text-align: color: red; font-weight: bold; font-size: 1rem;'>
-        조회 순서는 조회수 순입니다.
+        <p style='text-align: center; color: red; font-weight: bold; font-size: 0.85rem;'>
+        최근 1년 영상 중 가장 인기 있는(조회수) 순서로 보여드려요! 📈
         </p>
         """,
         unsafe_allow_html=True
