@@ -10,7 +10,6 @@ st.set_page_config(layout="wide")
 # -----------------------------------------------
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 # -----------------------------------------------
-
 # --- ▼▼▼ 이 CSS 블록 전체를 덮어쓰세요 ▼▼▼ ---
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 st.markdown("""
@@ -20,36 +19,52 @@ h1 {
     text-align: center;
 }
 
-/* --- (유지) 1. YouTube 스타일 검색창 (입력란) --- */
+/* --- (수정) 1. YouTube 스타일 검색창 (입력란) --- */
 div[data-testid="stTextInput"] input {
-    border-radius: 20px 0 0 20px; /* 왼쪽 둥글게 */
-    border: 1px solid #ccc;       /* 회색 테두리 */
-    border-right: none;          /* 오른쪽 테두리 제거 (버튼과 붙이기 위해) */
-    height: 40px;                /* 높이 고정 */
+    border-radius: 20px 0 0 20px; 
+    border: 1px solid #ccc;       
+    border-right: none;          
+    height: 40px;                
     padding-left: 15px;
     font-size: 1rem;
+    background-color: #ffffff !important; /* 배경 흰색으로 강제 */
 }
 
 /* --- (수정) 1. YouTube 스타일 검색창 (버튼) --- */
-/* (수정) 페이지의 2번째 컬럼(중앙) 내부의 2번째 컬럼(버튼)을 특정 */
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
-    border-radius: 0 20px 20px 0; /* 오른쪽 둥글게 */
-    border: 1px solid #ccc;       /* 회색 테두리 */
-    background-color: #f8f8f8;    /* 회색 배경 */
-    color: #333;                 /* 어두운 아이콘/텍스트 색 */
-    font-weight: normal;
+    border-radius: 0 20px 20px 0; 
+    border: 1px solid #ccc;       
+    border-left: none;           
+    background-color: #ffffff !important; /* 배경 흰색으로 강제 */
+    color: #333;                 
     height: 40px;
-    margin-left: -9px; /* 입력창에 붙이기 (핵심) */
+    width: 100% !important; /* 부모(컬럼) 너비 100% 채우기 */
+    /* margin-left: -9px; */ /* 삭제 (Flexbox로 대체) */
 }
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
-    background-color: #f0f0f0;    /* 호버 시 약간 어둡게 */
+    background-color: #f8f8f8 !important; /* 호버 시 회색 */
     color: #333;
+}
+
+/* --- (신규) 3. 검색창/버튼 강제 병합 (Flexbox) --- */
+/* 검색창(col1)과 버튼(col2)을 감싸는 부모(stHorizontalBlock) */
+div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] {
+    display: flex !important;
+    flex-wrap: nowrap !important; /* 모바일에서 줄바꿈(wrap) 방지 (핵심) */
+    gap: 0 !important; /* 틈새 제거 */
+}
+/* 첫 번째 컬럼 (검색창) - 남은 공간 모두 차지 */
+div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] > div:first-child {
+    flex: 1 1 auto !important; 
+    min-width: 0; 
+}
+/* 두 번째 컬럼 (버튼) - 크기 고정 */
+div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] > div:last-child {
+    flex: 0 0 50px !important; /* 버튼 컬럼 너비를 50px로 고정 */
 }
 
 
 /* --- (유지) 카드 UI 스타일 --- */
-
-/* Result video titles (H3) */
 .stMarkdown h3 a {
     text-decoration: none; 
     color: #030303;      
@@ -59,19 +74,15 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2
 .stMarkdown h3 a:hover {
     text-decoration: underline; 
 }
-
-/* Metric (조회수, 좋아요) 카드 */
 div[data-testid="stMetric"] {
     background-color: #f0f0f0;
     border-radius: 8px;
     padding: 10px;
 }
-/* Stats Label (e.g., "조회수") */
 div[data-testid="stMetricLabel"] {
     font-size: 0.8rem; 
     text-align: right; 
 }
-/* Stats Value (e.g., "1,234,567") */
 div[data-testid="stMetricValue"] {
     font-size: 1.25rem; 
     text-align: right; 
