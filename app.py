@@ -27,10 +27,45 @@ div[data-testid="stTextInput"] input {
     padding-left: 15px;
     font-size: 1rem;
 }
+네, CSS 스타일이 깨지고 검색창이 중앙 정렬되지 않는 문제를 확인했습니다.
 
-/* --- (신규) 1. YouTube 스타일 검색창 (버튼) --- */
-/* 두 번째 컬럼에 있는 버튼만 특정 */
-div[data-testid="stColumn"]:nth-child(2) .stButton > button {
+이전 st.columns([5, 1]) 레이아웃은 페이지 전체 너비(layout="wide")를 기준으로 5:1로 분할하기 때문에, 검색창이 너무 길어지고 버튼과 분리되어 스타일이 깨진 것입니다.
+
+해결책은 3단 컬럼을 만들어 검색창을 중앙에 배치하는 것입니다.
+
+app.py 파일의 2개 부분을 아래와 같이 수정(교체)해 주세요.
+
+1. import 문 바로 아랫부분 (CSS 교체)
+st.markdown("""...""") CSS 블록 전체를 아래의 수정된 코드로 덮어쓰기(교체)해 주세요.
+
+변경점:
+
+검색 버튼 CSS 선택자를 nth-child(2) (페이지의 두 번째 컬럼)에서, 중앙 컬럼(nth-child(2)) 내부의 두 번째 컬럼(nth-child(2))으로 더 구체화했습니다.
+
+Python
+
+# --- ▼▼▼ 이 CSS 블록 전체를 덮어쓰세요 ▼▼▼ ---
+# 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
+st.markdown("""
+<style>
+/* --- (유지) 2. 페이지 제목 중앙 정렬 --- */
+h1 {
+    text-align: center;
+}
+
+/* --- (유지) 1. YouTube 스타일 검색창 (입력란) --- */
+div[data-testid="stTextInput"] input {
+    border-radius: 20px 0 0 20px; /* 왼쪽 둥글게 */
+    border: 1px solid #ccc;       /* 회색 테두리 */
+    border-right: none;          /* 오른쪽 테두리 제거 (버튼과 붙이기 위해) */
+    height: 40px;                /* 높이 고정 */
+    padding-left: 15px;
+    font-size: 1rem;
+}
+
+/* --- (수정) 1. YouTube 스타일 검색창 (버튼) --- */
+/* (수정) 페이지의 2번째 컬럼(중앙) 내부의 2번째 컬럼(버튼)을 특정 */
+div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     border-radius: 0 20px 20px 0; /* 오른쪽 둥글게 */
     border: 1px solid #ccc;       /* 회색 테두리 */
     background-color: #f8f8f8;    /* 회색 배경 */
@@ -39,11 +74,10 @@ div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     height: 40px;
     margin-left: -9px; /* 입력창에 붙이기 (핵심) */
 }
-div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
+div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
     background-color: #f0f0f0;    /* 호버 시 약간 어둡게 */
     color: #333;
 }
-
 
 /* --- (유지) 카드 UI 스타일 --- */
 
@@ -196,21 +230,29 @@ def search_youtube_videos(search_term):
 # 4. 웹페이지 구성
 # -----------------------------------------------
 
-st.title("🔍 유튜브 검색 결과 조회") # 2. 제목 (아이콘 변경, 정렬은 CSS가 처리)
+st.title("🔍 유튜브 검색 결과 조회") 
 
-col1, col2 = st.columns([5, 1]) # 5:1 비율로 컬럼 분할
 
-with col1:
-   search_term = st.text_input(
-        "유튜브 검색어를 입력하세요:",
-        placeholder="검색", # 1. placeholder 추가
-        key="search_input",
-        on_change=lambda: st.session_state.update(run_search=True),
-        label_visibility="collapsed" 
-    )
+# 2. 검색창 중앙 정렬을 위한 3단 컬럼 (좌/중앙/우)
+left_space, main_search, right_space = st.columns([1, 3, 1])
 
-with col2:
-    run_button = st.button("🔍") # 1. 버튼 텍스트를 아이콘으로 변경
+# 중앙(main_search) 컬럼에 검색창과 버튼을 배치
+with main_search:
+    # 1. 검색창과 버튼을 한 줄에 배치 (5:1 비율)
+    col1, col2 = st.columns([5, 1]) 
+
+    with col1:
+        search_term = st.text_input(
+            "유튜브 검색어를 입력하세요:",
+            placeholder="검색", # 1. placeholder 추가
+            key="search_input",
+            on_change=lambda: st.session_state.update(run_search=True),
+            label_visibility="collapsed" 
+        )
+
+    with col2:
+        run_button = st.button("🔍") # 1. 버튼 텍스트를 아이콘으로 변경
+
 
 # "검색 실행" 버튼 클릭 또는 엔터 입력 시 실행
 if run_button or st.session_state.get("run_search"):
