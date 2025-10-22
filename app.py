@@ -30,7 +30,7 @@ div[data-testid="stTextInput"] input {
     background-color: #ffffff !important; 
 }
 
-/* --- (유지) 1, 2. YouTube 스타일 검색창 (버튼) --- */
+/* --- (★수정★) 1, 2. YouTube 스타일 검색창 (버튼) --- */
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     border-radius: 0 20px 20px 0; 
     border: 1px solid #ccc;       
@@ -38,7 +38,7 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2
     background-color: #ffffff !important; 
     color: #333;                 
     height: 40px;
-    width: 100%; /* 부모 컬럼을 꽉 채움 */
+    width: 50px !important; /* (★수정★) 버튼 너비를 50px로 고정 */
 }
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
     background-color: #f8f8f8 !important; 
@@ -62,7 +62,7 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] di
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] div[data-testid="stColumn"]:nth-child(2) {
     flex-grow: 0 !important;
     flex-shrink: 0 !important;
-    flex-basis: 60px !important; /* (★수정★) 버튼 너비를 70px에서 60px로 줄임 */
+    flex-basis: auto !important; /* (★수정★) 컬럼이 내용물(버튼) 크기를 따르도록 auto로 변경 */
 }
 /* --- (신규 블록 끝) --- */
 
@@ -93,7 +93,6 @@ div[data-testid="stMetricValue"] {
 </style>
 """, unsafe_allow_html=True)
 # --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
-
 # -----------------------------------------------
 # 2. API  설정
 # -----------------------------------------------
