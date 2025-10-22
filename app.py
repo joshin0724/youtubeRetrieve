@@ -203,7 +203,7 @@ def search_youtube_videos(search_term):
 st.markdown(
     """
     <h1>
-        <img src="youtube_logo.png" width="130" style="vertical-align:middle; margin-right:10px; margin-bottom:5px;">
+        <img src="youtube_logo.PNG" width="130" style="vertical-align:middle; margin-right:10px; margin-bottom:5px;">
         유튜브 검색 결과 조회
     </h1>
     """,
