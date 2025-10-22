@@ -18,30 +18,37 @@ h1 {
     text-align: center;
 }
 
-div[data-testid="stColumn"]:nth-child(2) .stButton {
-    display: flex;
-    justify-content: center;
+/* --- (신규) main_search 컬럼 내부 콘텐츠 중앙 정렬 --- */
+div[data-testid="stColumn"]:nth-child(2) {
+    text-align: center; /* 컬럼 내부의 모든 인라인 콘텐츠 중앙 정렬 */
 }
 
-div[data-testid="stColumn"]:nth-child(2) .stButton > button {    
+/* --- (수정) 검색 버튼 컨테이너 스타일 --- */
+/* 중앙(main_search) 컬럼 내부의 stButton 컨테이너 */
+div[data-testid="stColumn"]:nth-child(2) .stButton {
+    display: inline-block; /* text-align: center의 영향을 받도록 변경 */
+    margin-top: 10px; /* 검색창과의 간격 추가 */
+}
+
+/* --- (수정) 검색 버튼 자체 스타일 --- */
+/* 중앙(main_search) 컬럼 내부의 버튼 */
+div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     height: 40px;
-    background-color: #CC0000;
+    background-color: #FF0000; /* YouTube Red */
     color: white;
     border: none;
     border-radius: 4px; /* 약간 둥근 사각형 */
     font-weight: bold;
     padding-left: 1.5rem; /* 버튼 여백 추가 */
     padding-right: 1.5rem; /* 버튼 여백 추가 */
+    width: auto; /* (★수정★) 버튼이 내용물 너비만큼만 차지하도록 */
+    display: inline-block; /* (★수정★) 중앙 정렬을 위해 */
 }
 div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
     background-color: #CC0000; /* 호버 시 어두운 빨간색 */
     color: white;
 }
 
-div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
-    background-color: #CC0000; /* 호버 시 어두운 빨간색 */
-    color: white;
-}
 
 /* --- (유지) 카드 UI 스타일 --- */
 
