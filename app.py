@@ -30,7 +30,7 @@ div[data-testid="stTextInput"] input {
     background-color: #ffffff !important; 
 }
 
-/* --- (유지) 1, 2. YouTube 스타일 검색창 (버튼 - 데스크톱) --- */
+/* --- (수정) 1, 2. YouTube 스타일 검색창 (버튼 - 데스크톱) --- */
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     border-radius: 0 20px 20px 0; 
     border: 1px solid #ccc;       
@@ -38,30 +38,21 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2
     background-color: #ffffff !important; 
     color: #333;                 
     height: 40px;
-    margin-left: -9px;           /* 데스크톱에서 붙이기 */
+    /* margin-left: -9px; */  /* <-- (수정) 이 줄을 삭제 또는 주석 처리 */
 }
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
     background-color: #f8f8f8 !important; 
     color: #333;
 }
 
-/* --- (신규 수정) 3. 모바일 반응형 수정 (컬럼 유지) --- */
-@media (max-width: 640px) {
-    /* 5:1 컬럼을 감싸는 부모(HorizontalBlock) */
-    div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] {
-        display: grid !important;
-        grid-template-columns: 5fr 1fr !important; /* 5:1 비율 강제 */
-        gap: 0 !important; /* 컬럼 사이 갭 제거 */
-    }
-
-    /* (신규) 모바일에서 버튼의 마진을 0으로 리셋 */
-    div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
-        margin-left: 0px !important; 
-        border-radius: 0 20px 20px 0 !important;
-        border: 1px solid #ccc !important;
-        border-left: none !important;
-    }
+/* --- (신규) 3. 검색창/버튼 강제 병합 (모바일/데스크톱 공통) --- */
+/* 검색창(col1)과 버튼(col2)을 감싸는 부모(stHorizontalBlock)에 grid 적용 */
+div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] {
+    display: grid !important;
+    grid-template-columns: 5fr 1fr !important; /* 5:1 비율 강제 */
+    gap: 0 !important; /* 컬럼 사이 갭 제거 (핵심) */
 }
+/* --- (신규 블록 끝) --- */
 
 
 /* --- (유지) 카드 UI 스타일 --- */
@@ -89,7 +80,6 @@ div[data-testid="stMetricValue"] {
 }
 </style>
 """, unsafe_allow_html=True)
-# --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
 
 # -----------------------------------------------
 # 2. API  설정
