@@ -45,7 +45,7 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2
     color: #333;
 }
 
-/* --- (신규) 3. 검색창/버튼 강제 병합 (Flexbox) --- */
+/* --- (유지) 3. 검색창/버튼 강제 병합 (Flexbox) --- */
 /* 검색창(col1)과 버튼(col2)을 감싸는 부모(stHorizontalBlock) */
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] {
     display: flex !important;
@@ -62,7 +62,7 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] di
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] div[data-testid="stColumn"]:nth-child(2) {
     flex-grow: 0 !important;
     flex-shrink: 0 !important;
-    flex-basis: 70px !important; /* 버튼 너비 약 70px로 고정 */
+    flex-basis: 60px !important; /* (★수정★) 버튼 너비를 70px에서 60px로 줄임 */
 }
 /* --- (신규 블록 끝) --- */
 
@@ -92,7 +92,6 @@ div[data-testid="stMetricValue"] {
 }
 </style>
 """, unsafe_allow_html=True)
-# --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
 # --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
 
 # -----------------------------------------------
