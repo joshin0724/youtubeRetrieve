@@ -3,36 +3,59 @@ import streamlit as st
 import pandas as pd
 from googleapiclient.discovery import build
 from datetime import datetime, timedelta
+import re
 
 st.set_page_config(layout="wide")
 
 # -----------------------------------------------
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 # -----------------------------------------------
+
 st.markdown("""
 <style>
-/* YouTube Red Button */
-.stButton > button {
-    background-color: #FF0000;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
+/* --- (신규) 2. 페이지 제목 중앙 정렬 --- */
+h1 {
+    text-align: center;
 }
-.stButton > button:hover {
-    background-color: #CC0000;
-    color: white;
+
+/* --- (신규) 1. YouTube 스타일 검색창 (입력란) --- */
+div[data-testid="stTextInput"] input {
+    border-radius: 20px 0 0 20px; /* 왼쪽 둥글게 */
+    border: 1px solid #ccc;       /* 회색 테두리 */
+    border-right: none;          /* 오른쪽 테두리 제거 (버튼과 붙이기 위해) */
+    height: 40px;                /* 높이 고정 */
+    padding-left: 15px;
+    font-size: 1rem;
 }
+
+/* --- (신규) 1. YouTube 스타일 검색창 (버튼) --- */
+/* 두 번째 컬럼에 있는 버튼만 특정 */
+div[data-testid="stColumn"]:nth-child(2) .stButton > button {
+    border-radius: 0 20px 20px 0; /* 오른쪽 둥글게 */
+    border: 1px solid #ccc;       /* 회색 테두리 */
+    background-color: #f8f8f8;    /* 회색 배경 */
+    color: #333;                 /* 어두운 아이콘/텍스트 색 */
+    font-weight: normal;
+    height: 40px;
+    margin-left: -9px; /* 입력창에 붙이기 (핵심) */
+}
+div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
+    background-color: #f0f0f0;    /* 호버 시 약간 어둡게 */
+    color: #333;
+}
+
+
+/* --- (유지) 카드 UI 스타일 --- */
 
 /* Result video titles (H3) */
 .stMarkdown h3 a {
-    text-decoration: none; /* 밑줄 제거 */
-    color: #030303;      /* 유튜브 제목 색상 */
+    text-decoration: none; 
+    color: #030303;      
     font-weight: bold;
-    font-size: 1.1em;      /* 3. 영상 제목 폰트 1단계 축소 */
+    font-size: 1.1em;
 }
 .stMarkdown h3 a:hover {
-    text-decoration: underline; /* 마우스 올리면 밑줄 */
+    text-decoration: underline; 
 }
 
 /* Metric (조회수, 좋아요) 카드 */
@@ -41,23 +64,16 @@ div[data-testid="stMetric"] {
     border-radius: 8px;
     padding: 10px;
 }
-
-/* --- (수정/추가된 부분) --- */
-
 /* Stats Label (e.g., "조회수") */
 div[data-testid="stMetricLabel"] {
-    font-size: 0.8rem; /* 2. 폰트 2단계 축소 (라벨) */
-    font-weight: bold;
-    text-align: right; /* 1. 우측 정렬 (라벨) */
+    font-size: 0.8rem; 
+    text-align: right; 
 }
-
 /* Stats Value (e.g., "1,234,567") */
 div[data-testid="stMetricValue"] {
-    font-size: 1.25rem; /* 2. 폰트 2단계 축소 (값) - (기본값 1.75rem) */
-    text-align: right; /* 1. 우측 정렬 (값) */
+    font-size: 1.25rem; 
+    text-align: right; 
 }
-
-/* --- (수정/추가된 부분 끝) --- */
 </style>
 """, unsafe_allow_html=True)
 
@@ -180,20 +196,21 @@ def search_youtube_videos(search_term):
 # 4. 웹페이지 구성
 # -----------------------------------------------
 
-st.title("📈 유튜브 검색 결과 조회")
+st.title("🔍 유튜브 검색 결과 조회") # 2. 제목 (아이콘 변경, 정렬은 CSS가 처리)
 
 col1, col2 = st.columns([5, 1]) # 5:1 비율로 컬럼 분할
 
 with col1:
-    search_term = st.text_input(
+   search_term = st.text_input(
         "유튜브 검색어를 입력하세요:",
+        placeholder="검색", # 1. placeholder 추가
         key="search_input",
         on_change=lambda: st.session_state.update(run_search=True),
-        label_visibility="collapsed" # '유튜브 검색어를 입력하세요:' 레이블 숨김
+        label_visibility="collapsed" 
     )
 
 with col2:
-    run_button = st.button("검색 실행")
+    run_button = st.button("🔍") # 1. 버튼 텍스트를 아이콘으로 변경
 
 # "검색 실행" 버튼 클릭 또는 엔터 입력 시 실행
 if run_button or st.session_state.get("run_search"):
