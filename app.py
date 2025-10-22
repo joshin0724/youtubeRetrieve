@@ -229,6 +229,7 @@ def search_youtube_videos(search_term):
 #         ])    
     
 #     return styled
+
 # 5. Streamlit 웹페이지 구성
 st.title("📈 유튜브 검색 결과 조회")
 
@@ -244,7 +245,9 @@ with col1:
     )
 
 with col2:
-    run_button = st.button("검색")
+    run_button = st.button("검색 실행")
+
+# (이전 코드에는 아마 이 위치에 ... 이나 Ellipsis가 있었을 것입니다)
 
 # "검색 실행" 버튼 클릭 또는 엔터 입력 시 실행
 if run_button or st.session_state.get("run_search"):
@@ -273,7 +276,7 @@ if run_button or st.session_state.get("run_search"):
                     
                     with c1:
                         # 3. 썸네일 추가 (use_column_width -> use_container_width로 수정)
-                        st.image(row['썸네일'], use_container_width=True) # <-- ⚠️ 여기를 수정했습니다.
+                        st.image(row['썸네일'], use_container_width=True)
 
                     with c2:
                         # 1. 톤앤매너: 클릭 가능한 제목 (CSS 적용됨)
