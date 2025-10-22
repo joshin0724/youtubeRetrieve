@@ -38,10 +38,8 @@ def search_youtube_videos(search_term):
         search_response = youtube.search().list(
             q=search_term,
             part='snippet',
-            type='video',
-            # --- ▼▼▼ 이 아랫부분을 수정(교체)합니다 ▼▼▼ ---
-            maxResults=50, # <-- 10에서 50으로 변경
-            # --- ▲▲▲ 여기까지 수정(교체)합니다 ▲▲▲ ---
+            type='video',            
+            maxResults=50, # <-- 10에서 50으로 변경            
             order='viewCount',
             publishedAfter=one_year_ago
         ).execute()
@@ -119,13 +117,9 @@ def search_youtube_videos(search_term):
         return pd.DataFrame()
 
     # 4. 스타일 적용 함수
-def style_dataframe(df):
-    
-    # --- ▼▼▼ 이 함수를 수정합니다 ▼▼▼ ---
-    def make_clickable(url_str):
-        # return f'<a href="{url_str}" target="_blank">{url_str}</a>' # <-- 기존 코드
-        return f'<a href="{url_str}" target="_blank">영상보러가기</a>' # <-- 수정된 코드
-    # --- ▲▲▲ 여기까지 수정합니다 ▲▲▲ ---
+def style_dataframe(df):    
+    def make_clickable(url_str):        
+        return f'<a href="{url_str}" target="_blank">영상보러가기</a>' # <-- 수정된 코드    
     
     # 1. 정렬을 먼저 수행합니다.
     if '조회수' in df.columns:
@@ -138,11 +132,9 @@ def style_dataframe(df):
     
     # 3. 복사본에 링크 서식을 적용합니다.
     df_to_style['유튜브 링크'] = df_to_style['유튜브 링크'].apply(make_clickable)
-
     numeric_cols = ['조회수', '좋아요수', '채널구독자수']
 
-    def make_clickable(url_str):
-        # return f'<a href="{url_str}" target="_blank">{url_str}</a>' # <-- 기존 코드
+    def make_clickable(url_str):        
         return f'<a href="{url_str}" target="_blank">영상보러가기</a>' # <-- 수정된 코드
     
     # 1. 정렬을 먼저 수행합니다.
@@ -158,8 +150,7 @@ def style_dataframe(df):
     df_to_style['유튜브 링크'] = df_to_style['유튜브 링크'].apply(make_clickable)
 
     numeric_cols = ['조회수', '좋아요수', '채널구독자수']
-
-    # --- ▼▼▼ 이 아랫부분을 수정(교체)합니다 ▼▼▼ ---
+    
     # 4. 스타일을 적용합니다.
     styled = df_to_style.style \
         .hide(axis="index") \
@@ -180,8 +171,7 @@ def style_dataframe(df):
         ) \
         .set_table_styles([
             {'selector': 'th', 'props': [('text-align', 'center')]} # 4. 헤더 중앙 정렬
-        ])
-    # --- ▲▲▲ 여기까지 수정(교체)합니다 ▲▲▲ ---
+        ])    
     
     return styled
 
@@ -207,15 +197,12 @@ if st.button("검색 실행") or st.session_state.get("run_search"):
             
             if results_df.empty:
                 st.error("검색 결과가 없습니다.")
-            else:
-                # --- ▼▼▼ 이 아랫부분을 교체하세요 ▼▼▼ ---
+            else:            
                 
                 # 1. 위에서 수정한 style_dataframe 함수로 스타일 적용
                 styled_results = style_dataframe(results_df)
 
                 # 2. HTML로 변환하여 출력 (st.dataframe 대신 다시 이 방법 사용)
-                st.write(styled_results.to_html(escape=False), unsafe_allow_html=True)
-
-                # --- ▲▲▲ 여기까지 교체하세요 ▲▲▲ ---
+                st.write(styled_results.to_html(escape=False), unsafe_allow_html=True)                
 
 # (%%writefile app.py 명령어가 이 줄에서 종료됩니다)
