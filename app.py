@@ -203,8 +203,8 @@ left_space, main_search, right_space = st.columns([1, 3, 1])
 
 # 중앙(main_search) 컬럼에 검색창과 버튼을 배치
 with main_search:
-    # 1. 검색창과 버튼을 한 줄에 배치 (5:1 비율)
-    col1, col2 = st.columns([5, 1]) 
+    # 1. 검색창과 버튼을 한 줄에 배치 (3:1 비율)
+    col1, col2 = st.columns([3, 1]) 
 
     with col1:
         search_term = st.text_input(
