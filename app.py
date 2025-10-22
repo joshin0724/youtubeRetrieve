@@ -20,9 +20,7 @@ h1 {
     text-align: center;
 }
 
-div[data-testid="stTextInput"] input {
-    border-radius: 20px 0 0 20px; /* 왼쪽 둥글게 */
-    border-radius: 0 20px 20px 0; /* 오른쪽 둥글게 */
+div[data-testid="stTextInput"] input {    
     border: 1px solid #ccc;       /* 회색 테두리 */    
     height: 40px;                /* 높이 고정 */
     padding-left: 15px;
