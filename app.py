@@ -221,7 +221,7 @@ with main_search:
     
     st.markdown(
         """
-        <p style='text-align: center; color: #666; font-size: 0.85rem;'>
+        <p style='text-align: color: #666; font-size: 0.85rem;'>
         조회 순서는 조회수 순입니다.
         </p>
         """,
