@@ -11,7 +11,8 @@ st.set_page_config(layout="wide")
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 # -----------------------------------------------
 
-
+# --- ▼▼▼ 이 CSS 블록 전체를 덮어쓰세요 ▼▼▼ ---
+# 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 st.markdown("""
 <style>
 /* --- (유지) 2. 페이지 제목 중앙 정렬 --- */
@@ -19,52 +20,36 @@ h1 {
     text-align: center;
 }
 
-/* --- (유지) 1, 2. YouTube 스타일 검색창 (입력란) --- */
+/* --- (유지) 1. YouTube 스타일 검색창 (입력란) --- */
 div[data-testid="stTextInput"] input {
-    border-radius: 20px 0 0 20px; 
-    border: 1px solid #ccc;       
-    border-right: none;          
-    height: 40px;                
+    border-radius: 20px 0 0 20px; /* 왼쪽 둥글게 */
+    border: 1px solid #ccc;       /* 회색 테두리 */
+    border-right: none;          /* 오른쪽 테두리 제거 (버튼과 붙이기 위해) */
+    height: 40px;                /* 높이 고정 */
     padding-left: 15px;
     font-size: 1rem;
-    background-color: #ffffff !important; 
 }
 
-/* --- (유지) 1, 2. YouTube 스타일 검색창 (버튼 - 데스크톱) --- */
+/* --- (수정) 1. YouTube 스타일 검색창 (버튼) --- */
+/* (수정) 페이지의 2번째 컬럼(중앙) 내부의 2번째 컬럼(버튼)을 특정 */
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
-    border-radius: 0 20px 20px 0; 
-    border: 1px solid #ccc;       
-    border-left: none;           
-    background-color: #ffffff !important; 
-    color: #333;                 
+    border-radius: 0 20px 20px 0; /* 오른쪽 둥글게 */
+    border: 1px solid #ccc;       /* 회색 테두리 */
+    background-color: #f8f8f8;    /* 회색 배경 */
+    color: #333;                 /* 어두운 아이콘/텍스트 색 */
+    font-weight: normal;
     height: 40px;
-    margin-left: -9px;           /* 데스크톱에서 붙이기 */
+    margin-left: -9px; /* 입력창에 붙이기 (핵심) */
 }
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
-    background-color: #f8f8f8 !important; 
+    background-color: #f0f0f0;    /* 호버 시 약간 어둡게 */
     color: #333;
-}
-
-/* --- (신규 수정) 3. 모바일 반응형 수정 (컬럼 유지) --- */
-@media (max-width: 640px) {
-    /* 5:1 컬럼을 감싸는 부모(HorizontalBlock) */
-    div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] {
-        display: grid !important;
-        grid-template-columns: 5fr 1fr !important; /* 5:1 비율 강제 */
-        gap: 0 !important; /* 컬럼 사이 갭 제거 */
-    }
-
-    /* (신규) 모바일에서 버튼의 마진을 0으로 리셋 */
-    div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
-        margin-left: 0px !important; 
-        border-radius: 0 20px 20px 0 !important;
-        border: 1px solid #ccc !important;
-        border-left: none !important;
-    }
 }
 
 
 /* --- (유지) 카드 UI 스타일 --- */
+
+/* Result video titles (H3) */
 .stMarkdown h3 a {
     text-decoration: none; 
     color: #030303;      
@@ -74,21 +59,26 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2
 .stMarkdown h3 a:hover {
     text-decoration: underline; 
 }
+
+/* Metric (조회수, 좋아요) 카드 */
 div[data-testid="stMetric"] {
     background-color: #f0f0f0;
     border-radius: 8px;
     padding: 10px;
 }
+/* Stats Label (e.g., "조회수") */
 div[data-testid="stMetricLabel"] {
     font-size: 0.8rem; 
     text-align: right; 
 }
+/* Stats Value (e.g., "1,234,567") */
 div[data-testid="stMetricValue"] {
     font-size: 1.25rem; 
     text-align: right; 
 }
 </style>
 """, unsafe_allow_html=True)
+# --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
 
 # -----------------------------------------------
 # 2. API  설정
