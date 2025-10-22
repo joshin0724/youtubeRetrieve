@@ -19,17 +19,30 @@ st.markdown("""
 h1 {
     text-align: center;
 }
-/* --- (신규) 검색 버튼 스타일 --- */
+
+/* --- (신규) 검색 버튼 중앙 정렬 --- */
+/* 중앙(main_search) 컬럼 내부의 stButton 컨테이너를 중앙 정렬 */
+div[data-testid="stColumn"]:nth-child(2) .stButton {
+    display: flex;
+    justify-content: center;
+}
 /* 중앙(main_search) 컬럼 내부의 버튼 */
 div[data-testid="stColumn"]:nth-child(2) .stButton > button {
-    width: 100%; /* 컬럼 너비 100% */
+    /* width: 100%; */ /* <-- 이 줄 삭제 */
     height: 40px;
-    background-color: #FF0000; /* YouTube Red */
+    background-color: #CC0000; /* YouTube Red */
     color: white;
     border: none;
     border-radius: 4px; /* 약간 둥근 사각형 */
     font-weight: bold;
+    padding-left: 1.5rem; /* 버튼 여백 추가 */
+    padding-right: 1.5rem; /* 버튼 여백 추가 */
 }
+div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
+    background-color: #CC0000; /* 호버 시 어두운 빨간색 */
+    color: white;
+}
+
 div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
     background-color: #CC0000; /* 호버 시 어두운 빨간색 */
     color: white;
@@ -207,12 +220,12 @@ with main_search:
     )
 
     # 2. 검색 버튼 (st.columns 제거, 텍스트 변경)
-    run_button = st.button("검색 실행") 
+    run_button = st.button("검색") 
     
     # 3. 도움말 텍스트 (문법 오류 수정)
     st.markdown(
         """
-        <p style='text-align: center; color: red; font-weight: bold; font-size: 1rem;'>
+        <p style='text-align: left; font-weight: bold; font-size: 1rem;'>
         최근 1년 영상 중 가장 인기 있는(조회수) 순서로 보여드려요! 📈
         </p>
         """,
