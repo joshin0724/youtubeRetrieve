@@ -11,26 +11,21 @@ st.set_page_config(layout="wide")
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 # -----------------------------------------------
 
-# --- ▼▼▼ 이 CSS 블록 전체를 덮어쓰세요 ▼▼▼ ---
-# 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 st.markdown("""
 <style>
-/* --- (유지) 2. 페이지 제목 중앙 정렬 --- */
+
 h1 {
     text-align: center;
 }
 
-/* --- (신규) 검색 버튼 중앙 정렬 --- */
-/* 중앙(main_search) 컬럼 내부의 stButton 컨테이너를 중앙 정렬 */
 div[data-testid="stColumn"]:nth-child(2) .stButton {
     display: flex;
     justify-content: center;
 }
-/* 중앙(main_search) 컬럼 내부의 버튼 */
-div[data-testid="stColumn"]:nth-child(2) .stButton > button {
-    /* width: 100%; */ /* <-- 이 줄 삭제 */
+
+div[data-testid="stColumn"]:nth-child(2) .stButton > button {    
     height: 40px;
-    background-color: #CC0000; /* YouTube Red */
+    background-color: #CC0000;
     color: white;
     border: none;
     border-radius: 4px; /* 약간 둥근 사각형 */
@@ -207,8 +202,7 @@ st.title("🔍 유튜브 검색 결과 조회")
 # 검색창 중앙 정렬을 위한 3단 컬럼 (좌/중앙/우)
 left_space, main_search, right_space = st.columns([1, 3, 1])
 
-with main_search:
-    # --- ▼▼▼ 이 아랫부분을 수정(교체)합니다 ▼▼▼ ---
+with main_search:   
 
     # 1. 검색창 (st.columns 제거)
     search_term = st.text_input(
