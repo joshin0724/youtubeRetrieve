@@ -221,7 +221,7 @@ with main_search:
     
     st.markdown(
         """
-        <p style='text-align: center; color: red; font-weight: bold; font-size: 0.85rem;'>
+        <p style='text-align:  color: red; font-weight: bold; font-size: 1rem;'>
         최근 1년 영상 중 가장 인기 있는(조회수) 순서로 보여드려요! 📈
         </p>
         """,
