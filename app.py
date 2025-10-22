@@ -27,7 +27,7 @@ st.markdown("""
     text-decoration: none; /* 밑줄 제거 */
     color: #030303;      /* 유튜브 제목 색상 */
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 1.1em;      /* 3. 영상 제목 폰트 1단계 축소 */
 }
 .stMarkdown h3 a:hover {
     text-decoration: underline; /* 마우스 올리면 밑줄 */
@@ -39,6 +39,22 @@ div[data-testid="stMetric"] {
     border-radius: 8px;
     padding: 10px;
 }
+
+/* --- (수정/추가된 부분) --- */
+
+/* Stats Label (e.g., "조회수") */
+div[data-testid="stMetricLabel"] {
+    font-size: 0.8rem; /* 2. 폰트 2단계 축소 (라벨) */
+    text-align: right; /* 1. 우측 정렬 (라벨) */
+}
+
+/* Stats Value (e.g., "1,234,567") */
+div[data-testid="stMetricValue"] {
+    font-size: 1.25rem; /* 2. 폰트 2단계 축소 (값) - (기본값 1.75rem) */
+    text-align: right; /* 1. 우측 정렬 (값) */
+}
+
+/* --- (수정/추가된 부분 끝) --- */
 </style>
 """, unsafe_allow_html=True)
 
