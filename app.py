@@ -6,7 +6,9 @@ from datetime import datetime, timedelta
 
 st.set_page_config(layout="wide")
 
+# -----------------------------------------------
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
+# -----------------------------------------------
 st.markdown("""
 <style>
 /* YouTube Red Button */
@@ -60,7 +62,7 @@ div[data-testid="stMetricValue"] {
 """, unsafe_allow_html=True)
 
 # -----------------------------------------------
-# 1. API 키 설정
+# 2. API  설정
 # -----------------------------------------------
 try:
     API_KEY = st.secrets["YOUTUBE_API_KEY"]
@@ -77,7 +79,11 @@ def get_youtube_service():
         st.error(f"API 연결 실패: {e}")
         return None
 
-# 3. 데이터 검색 함수
+# -----------------------------------------------
+# 3. 조회 정보 설정
+# -----------------------------------------------
+
+# 1. 데이터 검색 함수
 @st.cache_data
 def search_youtube_videos(search_term):
     youtube = get_youtube_service()
@@ -98,8 +104,7 @@ def search_youtube_videos(search_term):
         ).execute()
 
         video_ids, channel_ids, video_snippets = [], [], {}
-        # (이하 코드는 동일합니다)
-        ...
+        
         for item in search_response.get('items', []):
             video_id = item['id']['videoId']
             channel_id = item['snippet']['channelId']
@@ -138,7 +143,7 @@ def search_youtube_videos(search_term):
             channel_stats[item['id']] = {
                 '채널구독자수': int(stats.get('subscriberCount', 0)) if not stats.get('hiddenSubscriberCount') else '비공개'
             }
-
+        
         # 데이터 취합
         final_data = []
         for vid in video_ids:
@@ -171,69 +176,12 @@ def search_youtube_videos(search_term):
         st.error(f"API 호출 중 오류 발생: {e}")
         return pd.DataFrame()
 
-#     # 4. 스타일 적용 함수
-# def style_dataframe(df):    
-#     def make_clickable(url_str):        
-#         return f'<a href="{url_str}" target="_blank">영상보러가기</a>' # <-- 수정된 코드    
-    
-#     # 1. 정렬을 먼저 수행합니다.
-#     if '조회수' in df.columns:
-#         df_sorted = df.sort_values(by='조회수', ascending=False).reset_index(drop=True)
-#     else:
-#         df_sorted = df.reset_index(drop=True) # 정렬할 게 없어도 인덱스 리셋
+# -----------------------------------------------
+# 4. 웹페이지 구성
+# -----------------------------------------------
 
-#     # 2. 정렬이 완료된 데이터프레임을 복사합니다.
-#     df_to_style = df_sorted.copy()
-    
-#     # 3. 복사본에 링크 서식을 적용합니다.
-#     df_to_style['유튜브 링크'] = df_to_style['유튜브 링크'].apply(make_clickable)
-#     numeric_cols = ['조회수', '좋아요수', '채널구독자수']
-
-#     def make_clickable(url_str):        
-#         return f'<a href="{url_str}" target="_blank">영상보러가기</a>' # <-- 수정된 코드
-    
-#     # 1. 정렬을 먼저 수행합니다.
-#     if '조회수' in df.columns:
-#         df_sorted = df.sort_values(by='조회수', ascending=False).reset_index(drop=True)
-#     else:
-#         df_sorted = df.reset_index(drop=True) # 정렬할 게 없어도 인덱스 리셋
-
-#     # 2. 정렬이 완료된 데이터프레임을 복사합니다.
-#     df_to_style = df_sorted.copy()
-    
-#     # 3. 복사본에 링크 서식을 적용합니다.
-#     df_to_style['유튜브 링크'] = df_to_style['유튜브 링크'].apply(make_clickable)
-
-#     numeric_cols = ['조회수', '좋아요수', '채널구독자수']
-    
-#     # 4. 스타일을 적용합니다.
-#     styled = df_to_style.style \
-#         .hide(axis="index") \
-#         .format(
-#             # 값이 숫자인 경우(int, float)에만 콤마 서식을 적용하고,
-#             # '비공개' 같은 문자열은 그대로 둡니다.
-#             formatter=lambda x: f"{x:,}" if isinstance(x, (int, float)) else x, 
-#             subset=numeric_cols
-#         ) \
-#         .set_properties(
-#             subset=numeric_cols, **{'text-align': 'right'} # 1. 숫자 우측 정렬
-#         ) \
-#         .set_properties(
-#             subset=['채널명'], **{'text-align': 'center'} # 2. 채널명 중앙 정렬
-#         ) \
-#         .set_properties(
-#             subset=['영상 제목', '유튜브 링크'], **{'text-align': 'left'} # 3. 영상 제목/링크 좌측 정렬
-#         ) \
-#         .set_table_styles([
-#             {'selector': 'th', 'props': [('text-align', 'center')]} # 4. 헤더 중앙 정렬
-#         ])    
-    
-#     return styled
-
-# 5. Streamlit 웹페이지 구성
 st.title("📈 유튜브 검색 결과 조회")
 
-# 2. 검색창과 버튼을 한 줄에 배치
 col1, col2 = st.columns([5, 1]) # 5:1 비율로 컬럼 분할
 
 with col1:
@@ -247,8 +195,6 @@ with col1:
 with col2:
     run_button = st.button("검색 실행")
 
-# (이전 코드에는 아마 이 위치에 ... 이나 Ellipsis가 있었을 것입니다)
-
 # "검색 실행" 버튼 클릭 또는 엔터 입력 시 실행
 if run_button or st.session_state.get("run_search"):
     st.session_state["run_search"] = False 
@@ -261,8 +207,7 @@ if run_button or st.session_state.get("run_search"):
             
             if results_df.empty:
                 st.error("검색 결과가 없습니다.")
-            else:
-                # --- ▼▼▼ (신규) 카드 레이아웃으로 결과 표시 (기존 st.write 대체) ▼▼▼ ---
+            else:                
                 
                 # 조회수 순으로 정렬 (데이터프레임 자체를 정렬)
                 results_df_sorted = results_df.sort_values(by='조회수', ascending=False).reset_index(drop=True)
@@ -298,5 +243,5 @@ if run_button or st.session_state.get("run_search"):
                         stats_cols[1].metric("좋아요수", format_metric(row['좋아요수']))
                         stats_cols[2].metric("채널구독자수", format_metric(row['채널구독자수']))
                 
-                # --- ▲▲▲ 여기까지 교체 ▲▲▲ ---
+                
 # (%%writefile app.py 명령어가 이 줄에서 종료됩니다)
