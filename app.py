@@ -19,28 +19,21 @@ st.markdown("""
 h1 {
     text-align: center;
 }
-
-div[data-testid="stTextInput"] input {    
-    border: 1px solid #ccc;       /* 회색 테두리 */    
-    height: 40px;                /* 높이 고정 */
-    padding-left: 15px;
-    font-size: 1rem;
-}
-
-div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
-    border-radius: 0 20px 20px 0; /* 오른쪽 둥글게 */
-    border: 1px solid #ccc;       /* 회색 테두리 */
-    background-color: #ffffff;    /* 회색 배경 */
-    color: #333;                 /* 어두운 아이콘/텍스트 색 */
-    font-weight: normal;
+/* --- (신규) 검색 버튼 스타일 --- */
+/* 중앙(main_search) 컬럼 내부의 버튼 */
+div[data-testid="stColumn"]:nth-child(2) .stButton > button {
+    width: 100%; /* 컬럼 너비 100% */
     height: 40px;
-    margin-left: -9px; /* 입력창에 붙이기 (핵심) */
+    background-color: #FF0000; /* YouTube Red */
+    color: white;
+    border: none;
+    border-radius: 4px; /* 약간 둥근 사각형 */
+    font-weight: bold;
 }
-div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
-    background-color: #f0f0f0;    /* 호버 시 약간 어둡게 */
-    color: #333;
+div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
+    background-color: #CC0000; /* 호버 시 어두운 빨간색 */
+    color: white;
 }
-
 
 /* --- (유지) 카드 UI 스타일 --- */
 
@@ -201,26 +194,25 @@ st.title("🔍 유튜브 검색 결과 조회")
 # 검색창 중앙 정렬을 위한 3단 컬럼 (좌/중앙/우)
 left_space, main_search, right_space = st.columns([1, 3, 1])
 
-# 중앙(main_search) 컬럼에 검색창과 버튼을 배치
 with main_search:
-    # 1. 검색창과 버튼을 한 줄에 배치 (3:1 비율)
-    col1, col2 = st.columns([3, 1]) 
+    # --- ▼▼▼ 이 아랫부분을 수정(교체)합니다 ▼▼▼ ---
 
-    with col1:
-        search_term = st.text_input(
-            "유튜브 검색어를 입력하세요:",
-            placeholder="검색", # 1. placeholder 추가
-            key="search_input",
-            on_change=lambda: st.session_state.update(run_search=True),
-            label_visibility="collapsed" 
-        )
+    # 1. 검색창 (st.columns 제거)
+    search_term = st.text_input(
+        "유튜브 검색어를 입력하세요:",
+        placeholder="검색", 
+        key="search_input",
+        on_change=lambda: st.session_state.update(run_search=True),
+        label_visibility="collapsed" 
+    )
 
-    with col2:
-        run_button = st.button("🔍") 
+    # 2. 검색 버튼 (st.columns 제거, 텍스트 변경)
+    run_button = st.button("검색 실행") 
     
+    # 3. 도움말 텍스트 (문법 오류 수정)
     st.markdown(
         """
-        <p style='text-align:  color: red; font-weight: bold; font-size: 1rem;'>
+        <p style='text-align: center; color: red; font-weight: bold; font-size: 1rem;'>
         최근 1년 영상 중 가장 인기 있는(조회수) 순서로 보여드려요! 📈
         </p>
         """,
