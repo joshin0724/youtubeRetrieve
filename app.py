@@ -74,7 +74,6 @@ div[data-testid="stMetricValue"] {
 }
 </style>
 """, unsafe_allow_html=True)
-# --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
 
 # -----------------------------------------------
 # 2. API  설정
@@ -113,8 +112,8 @@ def search_youtube_videos(search_term):
             q=search_term,
             part='snippet',
             type='video',            
-            maxResults=50, # <-- 10에서 50으로 변경            
-            order='relevance', # 'viewCount'에서 'relevance'로 변경
+            maxResults=50, 
+            order='relevance', 
             #order='viewCount',
             publishedAfter=one_year_ago
         ).execute()
@@ -198,7 +197,6 @@ def search_youtube_videos(search_term):
 
 st.title("🔍 유튜브 검색 결과 조회")
 
-
 # 검색창 중앙 정렬을 위한 3단 컬럼 (좌/중앙/우)
 left_space, main_search, right_space = st.columns([1, 3, 1])
 
@@ -216,7 +214,7 @@ with main_search:
     # 2. 검색 버튼 (st.columns 제거, 텍스트 변경)
     run_button = st.button("검색") 
     
-    # 3. 도움말 텍스트 (문법 오류 수정)
+    # 3. 도움말 텍스트 
     st.markdown(
         """
         <p style='text-align: left; font-weight: bold; font-size: 1rem;'>
