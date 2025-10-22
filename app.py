@@ -45,6 +45,7 @@ div[data-testid="stMetric"] {
 /* Stats Label (e.g., "조회수") */
 div[data-testid="stMetricLabel"] {
     font-size: 0.8rem; /* 2. 폰트 2단계 축소 (라벨) */
+    font-weight: bold;
     text-align: right; /* 1. 우측 정렬 (라벨) */
 }
 
@@ -243,7 +244,7 @@ with col1:
     )
 
 with col2:
-    run_button = st.button("검색 실행")
+    run_button = st.button("검색")
 
 # "검색 실행" 버튼 클릭 또는 엔터 입력 시 실행
 if run_button or st.session_state.get("run_search"):
