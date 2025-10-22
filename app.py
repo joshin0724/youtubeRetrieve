@@ -194,7 +194,7 @@ def search_youtube_videos(search_term):
 # 4. 웹페이지 구성
 # -----------------------------------------------
 
-st.title("🔍 YOUTUBE 인기 영상 조회")
+st.title("🔍 YouTube 인기 영상 조회")
 
 # 검색창 중앙 정렬을 위한 3단 컬럼 (좌/중앙/우)
 left_space, main_search, right_space = st.columns([1, 3, 1])
