@@ -115,7 +115,8 @@ def search_youtube_videos(search_term):
             part='snippet',
             type='video',            
             maxResults=50, # <-- 10에서 50으로 변경            
-            order='viewCount',
+            order='relevance', # 'viewCount'에서 'relevance'로 변경
+            #order='viewCount',
             publishedAfter=one_year_ago
         ).execute()
 
