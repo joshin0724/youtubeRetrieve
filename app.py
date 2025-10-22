@@ -23,15 +23,14 @@ h1 {
 /* --- (유지) 1. YouTube 스타일 검색창 (입력란) --- */
 div[data-testid="stTextInput"] input {
     border-radius: 20px 0 0 20px; /* 왼쪽 둥글게 */
-    border: 1px solid #ccc;       /* 회색 테두리 */
-    border-right: none;          /* 오른쪽 테두리 제거 (버튼과 붙이기 위해) */
+    border: 1px solid #ccc;       /* 회색 테두리 */    
     height: 40px;                /* 높이 고정 */
     padding-left: 15px;
     font-size: 1rem;
 }
 
 /* --- (수정) 1. YouTube 스타일 검색창 (버튼) --- */
-/* (수정) 페이지의 2번째 컬럼(중앙) 내부의 2번째 컬럼(버튼)을 특정 */
+
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     border-radius: 0 20px 20px 0; /* 오른쪽 둥글게 */
     border: 1px solid #ccc;       /* 회색 테두리 */
