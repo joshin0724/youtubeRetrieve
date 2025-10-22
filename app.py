@@ -196,12 +196,19 @@ def search_youtube_videos(search_term):
 # 4. 웹페이지 구성
 # -----------------------------------------------
 
-#st.title("🔍 유튜브 검색 결과 조회") 
+# st.title("🔍 유튜브 검색 결과 조회") # <-- 이 줄을 삭제하고,
 
-<h1>
-        <img src="image_87f5da.png" width="130" style="vertical-align:middle; margin-right:10px; margin-bottom:5px;">
+# (신규) 이미지가 포함된 제목 (중앙 정렬은 CSS가 처리)
+# (주의: 'image_87f5da.png' 파일이 GitHub 저장소에 app.py와 함께 있어야 합니다.)
+st.markdown(
+    """
+    <h1>
+        <img src="youtube_logo.png" width="130" style="vertical-align:middle; margin-right:10px; margin-bottom:5px;">
         유튜브 검색 결과 조회
-</h1>
+    </h1>
+    """,
+    unsafe_allow_html=True
+)
 
 
 # 2. 검색창 중앙 정렬을 위한 3단 컬럼 (좌/중앙/우)
