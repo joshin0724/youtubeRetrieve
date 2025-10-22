@@ -17,30 +17,43 @@ st.markdown("""
 h1 {
     text-align: center;
 }
-
+/* --- (수정) 1, 2. YouTube 스타일 검색창 (입력란) --- */
 div[data-testid="stTextInput"] input {
     border-radius: 20px 0 0 20px; /* 왼쪽 둥글게 */
-    border: 1px solid #ccc;       /* 회색 테두리 */    
-    height: 40px;                /* 높이 고정 */
+    border: 1px solid #ccc;       /* 회색 테두리 */
+    border-right: none;          /* 오른쪽 테두리 제거 */
+    height: 40px;                
     padding-left: 15px;
     font-size: 1rem;
+    background-color: #ffffff !important; /* 2. 배경색 흰색으로 강제 */
 }
 
+/* --- (수정) 1, 2. YouTube 스타일 검색창 (버튼) --- */
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     border-radius: 0 20px 20px 0; /* 오른쪽 둥글게 */
     border: 1px solid #ccc;       /* 회색 테두리 */
-    background-color: #f8f8f8;    /* 회색 배경 */
-    color: #333;                 /* 어두운 아이콘/텍스트 색 */
-    font-weight: normal;
+    border-left: none;           /* 1. 왼쪽 테두리 제거 (합치기) */
+    background-color: #ffffff !important;  /* 2. 배경색 흰색으로 강제 */
+    color: #333;                 
     height: 40px;
-    margin-left: -9px; /* 입력창에 붙이기 (핵심) */
+    margin-left: -9px;           /* 입력창에 붙이기 */
 }
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
-    background-color: #f0f0f0;    /* 호버 시 약간 어둡게 */
+    background-color: #f8f8f8 !important;  /* 호버 시 회색 */
     color: #333;
 }
 
-/* Result video titles (H3) */
+/* --- (신규) 3. 모바일 반응형 수정 (컬럼 유지) --- */
+@media (max-width: 640px) {
+    /* 5:1 컬럼을 감싸는 부모(HorizontalBlock)를 찾습니다 */
+    div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] {
+        grid-template-columns: 5fr 1fr !important; /* 모바일에서도 5:1 비율 강제 */
+        grid-auto-flow: column !important;         /* 가로 흐름 강제 */
+    }
+}
+
+
+/* --- (유지) 카드 UI 스타일 --- */
 .stMarkdown h3 a {
     text-decoration: none; 
     color: #030303;      
@@ -50,19 +63,15 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2
 .stMarkdown h3 a:hover {
     text-decoration: underline; 
 }
-
-/* Metric (조회수, 좋아요) 카드 */
 div[data-testid="stMetric"] {
     background-color: #f0f0f0;
     border-radius: 8px;
     padding: 10px;
 }
-/* Stats Label (e.g., "조회수") */
 div[data-testid="stMetricLabel"] {
     font-size: 0.8rem; 
     text-align: right; 
 }
-/* Stats Value (e.g., "1,234,567") */
 div[data-testid="stMetricValue"] {
     font-size: 1.25rem; 
     text-align: right; 
