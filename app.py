@@ -15,12 +15,11 @@ st.set_page_config(layout="wide")
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 st.markdown("""
 <style>
-/* --- (유지) 2. 페이지 제목 중앙 정렬 --- */
+
 h1 {
     text-align: center;
 }
 
-/* --- (유지) 1. YouTube 스타일 검색창 (입력란) --- */
 div[data-testid="stTextInput"] input {
     border-radius: 20px 0 0 20px; /* 왼쪽 둥글게 */
     border: 1px solid #ccc;       /* 회색 테두리 */    
@@ -219,7 +218,15 @@ with main_search:
 
     with col2:
         run_button = st.button("🔍") # 1. 버튼 텍스트를 아이콘으로 변경
-
+    
+    st.markdown(
+        """
+        <p style='text-align: center; color: #666; font-size: 0.85rem;'>
+        조회 순서는 조회수 순입니다.
+        </p>
+        """,
+        unsafe_allow_html=True
+    )
 
 # "검색 실행" 버튼 클릭 또는 엔터 입력 시 실행
 if run_button or st.session_state.get("run_search"):
