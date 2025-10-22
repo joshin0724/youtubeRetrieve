@@ -18,17 +18,20 @@ h1 {
     text-align: center;
 }
 
-/* --- (수정) 1. YouTube 스타일 검색창 (입력란) --- */
-div[data-testid="stTextInput"] input {
-    border-radius: 20px; /* 둥근 사각형 */
-    border: 1px solid #ccc;       
-    height: 40px;                
-    padding-left: 15px;
-    font-size: 1rem;
+/* --- (신규) main_search 컬럼 내부 콘텐츠 중앙 정렬 --- */
+div[data-testid="stColumn"]:nth-child(2) {
+    text-align: center; /* 컬럼 내부의 모든 인라인 콘텐츠 중앙 정렬 */
 }
 
-/* --- (수정) 검색 버튼 스타일 --- */
-/* 중앙(main_search) 컬럼 내부의 모든 버튼 */
+/* --- (수정) 검색 버튼 컨테이너 스타일 --- */
+/* 중앙(main_search) 컬럼 내부의 stButton 컨테이너 */
+div[data-testid="stColumn"]:nth-child(2) .stButton {
+    display: inline-block; /* text-align: center의 영향을 받도록 변경 */
+    margin-top: 10px; /* 검색창과의 간격 추가 */
+}
+
+/* --- (수정) 검색 버튼 자체 스타일 --- */
+/* 중앙(main_search) 컬럼 내부의 버튼 */
 div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     height: 40px;
     background-color: #FF0000; /* YouTube Red */
@@ -36,8 +39,10 @@ div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     border: none;
     border-radius: 4px; /* 약간 둥근 사각형 */
     font-weight: bold;
-    width: 100%; /* (★수정★) 부모 컬럼(col2_btn)의 100%를 채움 */
-    margin-top: 10px; /* 검색창과의 간격 */
+    padding-left: 1.5rem; /* 버튼 여백 추가 */
+    padding-right: 1.5rem; /* 버튼 여백 추가 */
+    width: auto; /* (★수정★) 버튼이 내용물 너비만큼만 차지하도록 */
+    display: inline-block; /* (★수정★) 중앙 정렬을 위해 */
 }
 div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
     background-color: #CC0000; /* 호버 시 어두운 빨간색 */
@@ -213,22 +218,19 @@ with main_search:
         label_visibility="collapsed" 
     )
 
-    # 2. 버튼 중앙 정렬을 위한 3단 컬럼
-    col1_btn, col2_btn, col3_btn = st.columns([1, 1, 1]) # [빈공간] [버튼] [빈공간]
+    # 2. 검색 버튼 (st.columns 제거, 텍스트 변경)
+    run_button = st.button("검색") 
     
-    with col2_btn: # 중앙 컬럼에 버튼 배치
-        run_button = st.button("검색") 
-    
-    # 3. 도움말 텍스트 (CSS 문법 오류 및 정렬 수정)
+    # 3. 도움말 텍스트 
     st.markdown(
         """
-        <p style='text-align: center; color: red; font-weight: bold; font-size: 1rem;'>
+        <p style='text-align: left; font-weight: bold; font-size: 1rem;'>
         최근 1년 영상 중 가장 인기 있는(조회수) 순서로 보여드려요! 📈
         </p>
         """,
         unsafe_allow_html=True
     )
-    
+
 # "검색 실행" 버튼 클릭 또는 엔터 입력 시 실행
 if run_button or st.session_state.get("run_search"):
     st.session_state["run_search"] = False 
