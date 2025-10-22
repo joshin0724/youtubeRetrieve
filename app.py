@@ -18,20 +18,15 @@ h1 {
     text-align: center;
 }
 
-/* --- (신규) main_search 컬럼 내부 콘텐츠 중앙 정렬 --- */
 div[data-testid="stColumn"]:nth-child(2) {
     text-align: center; /* 컬럼 내부의 모든 인라인 콘텐츠 중앙 정렬 */
 }
 
-/* --- (수정) 검색 버튼 컨테이너 스타일 --- */
-/* 중앙(main_search) 컬럼 내부의 stButton 컨테이너 */
 div[data-testid="stColumn"]:nth-child(2) .stButton {
     display: inline-block; /* text-align: center의 영향을 받도록 변경 */
     margin-top: 10px; /* 검색창과의 간격 추가 */
 }
 
-/* --- (수정) 검색 버튼 자체 스타일 --- */
-/* 중앙(main_search) 컬럼 내부의 버튼 */
 div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     height: 40px;
     background-color: #FF0000; /* YouTube Red */
@@ -48,9 +43,6 @@ div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
     background-color: #CC0000; /* 호버 시 어두운 빨간색 */
     color: white;
 }
-
-
-/* --- (유지) 카드 UI 스타일 --- */
 
 /* Result video titles (H3) */
 .stMarkdown h3 a {
@@ -104,7 +96,7 @@ def get_youtube_service():
 # 3. 조회 정보 설정
 # -----------------------------------------------
 
-# 1. 데이터 검색 함수
+# 데이터 검색 함수
 @st.cache_data
 def search_youtube_videos(search_term):
     youtube = get_youtube_service()
@@ -120,7 +112,7 @@ def search_youtube_videos(search_term):
             part='snippet',
             type='video',            
             maxResults=50, 
-            order='relevance', 
+            order='relevance', #연관성
             #order='viewCount',
             publishedAfter=one_year_ago
         ).execute()
