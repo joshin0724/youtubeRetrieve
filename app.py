@@ -10,45 +10,61 @@ st.set_page_config(layout="wide")
 # -----------------------------------------------
 # 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 # -----------------------------------------------
-
+# --- ▼▼▼ 이 CSS 블록 전체를 덮어쓰세요 ▼▼▼ ---
+# 1. UI/UX 개선: YouTube 톤앤매너 (CSS 주입)
 st.markdown("""
 <style>
+/* --- (유지) 2. 페이지 제목 중앙 정렬 --- */
 h1 {
     text-align: center;
 }
 
+/* --- (유지) 1, 2. YouTube 스타일 검색창 (입력란) --- */
 div[data-testid="stTextInput"] input {
-    border-radius: 20px 0 0 20px; /* 왼쪽 둥글게 */
-    border: 1px solid #ccc;       /* 회색 테두리 */
-    border-right: none;          /* 오른쪽 테두리 제거 */
+    border-radius: 20px 0 0 20px; 
+    border: 1px solid #ccc;       
+    border-right: none;          
     height: 40px;                
     padding-left: 15px;
     font-size: 1rem;
-    background-color: #ffffff !important; /* 2. 배경색 흰색으로 강제 */
+    background-color: #ffffff !important; 
 }
 
+/* --- (유지) 1, 2. YouTube 스타일 검색창 (버튼 - 데스크톱) --- */
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
-    border-radius: 0 20px 20px 0; /* 오른쪽 둥글게 */
-    border: 1px solid #ccc;       /* 회색 테두리 */
-    border-left: none;           /* 1. 왼쪽 테두리 제거 (합치기) */
-    background-color: #ffffff !important;  /* 2. 배경색 흰색으로 강제 */
+    border-radius: 0 20px 20px 0; 
+    border: 1px solid #ccc;       
+    border-left: none;           
+    background-color: #ffffff !important; 
     color: #333;                 
     height: 40px;
-    margin-left: -9px;           /* 입력창에 붙이기 */
+    margin-left: -9px;           /* 데스크톱에서 붙이기 */
 }
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
-    background-color: #f8f8f8 !important;  /* 호버 시 회색 */
+    background-color: #f8f8f8 !important; 
     color: #333;
 }
 
+/* --- (신규 수정) 3. 모바일 반응형 수정 (컬럼 유지) --- */
 @media (max-width: 640px) {
-    /* 5:1 컬럼을 감싸는 부모(HorizontalBlock)를 찾습니다 */
+    /* 5:1 컬럼을 감싸는 부모(HorizontalBlock) */
     div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] {
-        grid-template-columns: 5fr 1fr !important; /* 모바일에서도 5:1 비율 강제 */
-        grid-auto-flow: column !important;         /* 가로 흐름 강제 */
+        display: grid !important;
+        grid-template-columns: 5fr 1fr !important; /* 5:1 비율 강제 */
+        gap: 0 !important; /* 컬럼 사이 갭 제거 */
+    }
+
+    /* (신규) 모바일에서 버튼의 마진을 0으로 리셋 */
+    div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
+        margin-left: 0px !important; 
+        border-radius: 0 20px 20px 0 !important;
+        border: 1px solid #ccc !important;
+        border-left: none !important;
     }
 }
 
+
+/* --- (유지) 카드 UI 스타일 --- */
 .stMarkdown h3 a {
     text-decoration: none; 
     color: #030303;      
@@ -73,6 +89,7 @@ div[data-testid="stMetricValue"] {
 }
 </style>
 """, unsafe_allow_html=True)
+# --- ▲▲▲ 여기까지 덮어쓰세요 ▲▲▲ ---
 
 # -----------------------------------------------
 # 2. API  설정
