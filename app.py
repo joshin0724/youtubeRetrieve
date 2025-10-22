@@ -212,7 +212,6 @@ def search_youtube_videos(search_term):
 #         ])    
     
 #     return styled
-
 # 5. Streamlit 웹페이지 구성
 st.title("📈 유튜브 검색 결과 조회")
 
@@ -242,7 +241,8 @@ if run_button or st.session_state.get("run_search"):
             
             if results_df.empty:
                 st.error("검색 결과가 없습니다.")
-            else:                
+            else:
+                # --- ▼▼▼ (신규) 카드 레이아웃으로 결과 표시 (기존 st.write 대체) ▼▼▼ ---
                 
                 # 조회수 순으로 정렬 (데이터프레임 자체를 정렬)
                 results_df_sorted = results_df.sort_values(by='조회수', ascending=False).reset_index(drop=True)
@@ -255,8 +255,8 @@ if run_button or st.session_state.get("run_search"):
                     c1, c2 = st.columns([1, 3]) 
                     
                     with c1:
-                        # 3. 썸네일 추가
-                        st.image(row['썸네일'], use_column_width=True)
+                        # 3. 썸네일 추가 (use_column_width -> use_container_width로 수정)
+                        st.image(row['썸네일'], use_container_width=True) # <-- ⚠️ 여기를 수정했습니다.
 
                     with c2:
                         # 1. 톤앤매너: 클릭 가능한 제목 (CSS 적용됨)
@@ -276,6 +276,7 @@ if run_button or st.session_state.get("run_search"):
                         
                         stats_cols[0].metric("조회수", format_metric(row['조회수']))
                         stats_cols[1].metric("좋아요수", format_metric(row['좋아요수']))
-                        stats_cols[2].metric("채널구독자수", format_metric(row['채널구독자수']))               
+                        stats_cols[2].metric("채널구독자수", format_metric(row['채널구독자수']))
                 
+                # --- ▲▲▲ 여기까지 교체 ▲▲▲ ---
 # (%%writefile app.py 명령어가 이 줄에서 종료됩니다)
