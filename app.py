@@ -30,7 +30,8 @@ div[data-testid="stTextInput"] input {
     background-color: #ffffff !important; 
 }
 
-/* --- (★수정★) 1, 2. YouTube 스타일 검색창 (버튼) --- */
+/* --- (수정) 1, 2. YouTube 스타일 검색창 (버튼) --- */
+/* 버튼이 부모(컬럼)의 너비를 100% 채우도록 함 */
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button {
     border-radius: 0 20px 20px 0; 
     border: 1px solid #ccc;       
@@ -38,14 +39,14 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2
     background-color: #ffffff !important; 
     color: #333;                 
     height: 40px;
-    width: 50px !important; /* (★수정★) 버튼 너비를 50px로 고정 */
+    width: 100% !important; /* (★수정★) 버튼이 컬럼 너비를 100% 채우도록 */
 }
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stColumn"]:nth-child(2) .stButton > button:hover {
     background-color: #f8f8f8 !important; 
     color: #333;
 }
 
-/* --- (유지) 3. 검색창/버튼 강제 병합 (Flexbox) --- */
+/* --- (신규) 3. 검색창/버튼 강제 병합 (Flexbox - 최종 시도) --- */
 /* 검색창(col1)과 버튼(col2)을 감싸는 부모(stHorizontalBlock) */
 div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] {
     display: flex !important;
@@ -53,16 +54,15 @@ div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] {
     gap: 0 !important; /* 틈새 제거 */
 }
 /* 첫 번째 컬럼 (검색창) - 남은 공간 모두 차지 */
-div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] div[data-testid="stColumn"]:nth-child(1) {
-    flex-grow: 1 !important;
-    flex-shrink: 1 !important;
+/* (수정) :first-child 선택자 사용 */
+div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] > div:first-child {
+    flex: 1 1 auto !important; /* (★수정★) 남은 공간 모두 차지 */
     min-width: 0; /* 너비가 줄어들 수 있도록 허용 */
 }
 /* 두 번째 컬럼 (버튼) - 크기 고정 */
-div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] div[data-testid="stColumn"]:nth-child(2) {
-    flex-grow: 0 !important;
-    flex-shrink: 0 !important;
-    flex-basis: auto !important; /* (★수정★) 컬럼이 내용물(버튼) 크기를 따르도록 auto로 변경 */
+/* (수정) :last-child 선택자 사용 */
+div[data-testid="stColumn"]:nth-child(2) div[data-testid="stHorizontalBlock"] > div:last-child {
+    flex: 0 0 50px !important; /* (★수정★) 버튼 컬럼 너비를 50px로 고정 */
 }
 /* --- (신규 블록 끝) --- */
 
