@@ -105,6 +105,23 @@ def search_youtube_videos(search_term):
 
     one_year_ago = (datetime.utcnow() - timedelta(days=365)).isoformat("T") + "Z"
 
+    # =========================================================================
+    # ISO 8601 Duration을 초(seconds)로 변환하는 함수 추가
+    # =========================================================================
+    def convert_iso8601_to_seconds(duration):
+        # 'PT1M30S' -> 90초
+        # 'PT45S' -> 45초
+        
+        # 정규식 패턴: P(일)T(시간)M(분)S(초)
+        match = re.match('PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?', duration)
+        if not match:
+            return 0
+            
+        hours = int(match.group(1) or 0)
+        minutes = int(match.group(2) or 0)
+        seconds = int(match.group(3) or 0)
+        return hours * 3600 + minutes * 60 + seconds
+        
     try:
         # API 호출 1: 검색
         search_response = youtube.search().list(
@@ -137,42 +154,76 @@ def search_youtube_videos(search_term):
 
         # API 호출 2: 영상 통계
         video_response = youtube.videos().list(
-            part='statistics', id=','.join(video_ids)
+            part='statistics,contentDetails', id=','.join(video_ids) # <-- 수정할 부분
         ).execute()
+# 숏츠 필터링용 임시 ID 리스트 및 통계/길이 데이터 딕셔너리
+        filtered_video_ids = []
         video_stats = {}
+        
         for item in video_response.get('items', []):
+            vid = item['id']
             stats = item['statistics']
-            video_stats[item['id']] = {
-                '조회수': int(stats.get('viewCount', 0)),
-                '좋아요수': int(stats.get('likeCount', 0)) if 'likeCount' in stats else '비공개',
-            }
+            duration_iso = item['contentDetails']['duration'] # ISO 8601 길이
+            duration_seconds = convert_iso8601_to_seconds(duration_iso)
+            
+            # ---------------------------------------------------------------------
+            # 조건 1: 영상 길이가 60초 초과 (일반 영상)인 경우에만 추가 (<- 수정할 부분)
+            # ---------------------------------------------------------------------
+            if duration_seconds > 60:
+                filtered_video_ids.append(vid)
+                video_stats[vid] = {
+                    '조회수': int(stats.get('viewCount', 0)),
+                    '좋아요수': int(stats.get('likeCount', 0)) if 'likeCount' in stats else '비공개',
+                    '영상 길이(초)': duration_seconds # 디버깅용으로 추가 가능
+                }
 
-        # API 호출 3: 채널 통계
+        # 필터링된 ID가 없는 경우
+        if not filtered_video_ids:
+            return pd.DataFrame()
+        
+        # ---------------------------------------------------------------------
+        # API 호출 3: 채널 통계 (기존 로직 유지)
+        # 단, 채널 ID는 필터링된 영상의 채널 ID로 재구성해야 함
+        # ---------------------------------------------------------------------
+        # 필터링된 영상들만 추려서 채널 ID 목록 재구성
+        filtered_channel_ids = []
+        for vid in filtered_video_ids:
+            # search_response를 다시 순회하며 채널 ID를 찾거나,
+            # video_snippets에 채널 ID를 미리 저장해두는 방법도 좋음
+            for item in search_response.get('items', []):
+                 if item['id']['videoId'] == vid:
+                     filtered_channel_ids.append(item['snippet']['channelId'])
+                     break
+        
+        # 채널 ID 중복 제거 후 API 호출
         channel_response = youtube.channels().list(
-            part='statistics', id=','.join(list(set(channel_ids)))
+            part='statistics', id=','.join(list(set(filtered_channel_ids)))
         ).execute()
+        
         channel_stats = {}
         for item in channel_response.get('items', []):
             stats = item['statistics']
             channel_stats[item['id']] = {
                 '채널구독자수': int(stats.get('subscriberCount', 0)) if not stats.get('hiddenSubscriberCount') else '비공개'
             }
-        
-        # 데이터 취합
+
+        # ---------------------------------------------------------------------
+        # 데이터 취합 (필터링된 ID를 기준으로 취합)
+        # ---------------------------------------------------------------------
         final_data = []
-        for vid in video_ids:
+        for vid in filtered_video_ids: # <-- 수정된 ID 리스트 사용
             snippet_data = video_snippets.get(vid, {})
             stats_data = video_stats.get(vid, {})
             
             current_channel_id = None
             for item in search_response.get('items', []):
                  if item['id']['videoId'] == vid:
-                    current_channel_id = item['snippet']['channelId']
-                    break
-            
+                     current_channel_id = item['snippet']['channelId']
+                     break
+                     
             channel_data = channel_stats.get(current_channel_id, {})
             
-            row = {                
+            row = {                 
                 '썸네일': snippet_data.get('썸네일'),
                 '영상 제목': snippet_data.get('영상 제목'),
                 '조회수': stats_data.get('조회수', 0),
