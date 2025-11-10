@@ -108,7 +108,7 @@ def search_youtube_videos(search_term):
     try:
         # API 호출 1: 검색
         search_response = youtube.search().list(
-            q=search_term,
+            q=search_term + ' -shorts', # <------------------------ 수정할 부분
             part='snippet',
             type='video',            
             maxResults=50, 
