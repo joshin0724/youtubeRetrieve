@@ -67,8 +67,8 @@ except KeyError:
 
 # 2-2. Naver API 설정
 try:
-    NAVER_CLIENT_ID = st.secrets["ilDb5OUSHtH8So32b8G6"]
-    NAVER_CLIENT_SECRET = st.secrets["WFuEGiACiQ"]
+    NAVER_CLIENT_ID = st.secrets[ilDb5OUSHtH8So32b8G6]
+    NAVER_CLIENT_SECRET = st.secrets[WFuEGiACiQ]
 except KeyError:
     st.error("⚠️ NAVER_CLIENT_ID 또는 NAVER_CLIENT_SECRET이 설정되지 않았습니다.")
     st.stop()
