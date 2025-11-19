@@ -64,6 +64,29 @@ div[data-testid="stMetric"] {
     border-radius: 8px;
     padding: 10px;
 }
+/* [추가됨] HTML 블로그 테이블 스타일 */
+.blog-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+.blog-table th {
+    background-color: #f0f2f6;
+    color: #31333F;
+    font-weight: bold;
+    padding: 12px;
+    text-align: center; /* 좌측 정렬에서 중앙 정렬로 변경 */
+    border-bottom: 2px solid #ddd;
+}
+.blog-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.95rem;
+    text-align: center; /* 데이터 셀 중앙 정렬 추가 */
+}
+.blog-table tr:hover {
+    background-color: #f9f9f9;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -275,8 +298,6 @@ if run_button:
                         stats_cols[0].metric("조회수", view_count)
                         stats_cols[1].metric("좋아요수", like_count)
                         stats_cols[2].metric("구독자수", sub_count)
-
-# ... (상단 YouTube Tab1 코드는 그대로 유지) ...
 
         # [Tab 2] Naver 블로그 (수정된 부분)
         with tab2:
