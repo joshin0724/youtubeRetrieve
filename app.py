@@ -236,6 +236,7 @@ with main_search:
     st.markdown("""
         <p style='text-align: left; font-size: 0.9rem; color: gray;'>
         ※ 버튼 클릭 시 <b>유튜브</b>와 <b>네이버 블로그</b> 결과를 동시에 조회합니다.
+        ※ 유튜브 영상은 검색어와 연관성이 높고, 최근 1년 영상 중 가장 인기 있는(조회수) 순서로 보여드려요! Shorts 영상은 제외 됩니다. 📈
         </p>
         """, unsafe_allow_html=True)
 
@@ -275,21 +276,29 @@ if run_button:
                         stats_cols[1].metric("좋아요수", like_count)
                         stats_cols[2].metric("구독자수", sub_count)
 
-        # [Tab 2] Naver
+# ... (상단 YouTube Tab1 코드는 그대로 유지) ...
+
+        # [Tab 2] Naver 블로그 (수정된 부분)
         with tab2:
             if naver_df.empty:
                 st.info("네이버 블로그 검색 결과가 없습니다 (또는 API 키 확인 필요).")
             else:
-                st.write(f"### '{search_term}' 관련 블로그 포스트")
-                st.data_editor(
-                    naver_df,
-                    column_config={
-                        "링크": st.column_config.LinkColumn("보러가기", display_text="게시글 이동"),
-                        "블로그 제목": st.column_config.TextColumn("글 제목", width="large"),
-                        "블로그 주인(이름)": st.column_config.TextColumn("블로거", width="medium"),
-                        "업로드 일자": st.column_config.TextColumn("작성일", width="small"),
-                    },
-                    hide_index=True,
-                    use_container_width=True
+                st.write(f"### 📗 '{search_term}' 관련 블로그 포스트")
+                
+                # 1. [수정] '블로그 제목' 컬럼을 클릭 가능한 HTML 태그(<a>)로 변환
+                # target="_blank"는 새 창에서 열기를 의미합니다.
+                naver_df['블로그 제목'] = naver_df.apply(
+                    lambda x: f'<a href="{x["링크"]}" target="_blank">{x["블로그 제목"]}</a>', 
+                    axis=1
                 )
-                st.caption("※ 네이버 API 정책상 이웃 수는 제공되지 않습니다.")
+
+                # 2. [수정] '링크' 컬럼(보러가기)은 삭제하고, 화면에 보여줄 컬럼만 선택
+                display_df = naver_df[['블로그 제목', '블로그 주인(이름)', '업로드 일자']]
+
+                # 3. [수정] DataFrame을 HTML 테이블로 변환하여 렌더링
+                # escape=False: HTML 태그를 텍스트가 아닌 코드로 인식하게 함
+                # index=False: 불필요한 인덱스 번호 제거
+                html_table = display_df.to_html(escape=False, index=False, classes="blog-table")
+                st.markdown(html_table, unsafe_allow_html=True)
+
+                st.caption("※ 제목을 클릭하면 해당 블로그 게시물로 이동합니다.")
