@@ -258,7 +258,7 @@ with main_search:
     
     st.markdown("""
         <p style='text-align: left; font-size: 0.9rem; color: gray;'>
-        ※ 버튼 클릭 시 <b>유튜브</b>와 <b>네이버 블로그</b> 결과를 동시에 조회합니다.
+        ※ 버튼 클릭 시 <b>유튜브</b>와 <b>네이버 블로그</b> 결과를 동시에 조회합니다. </br>
         ※ 유튜브 영상은 검색어와 연관성이 높고, 최근 1년 영상 중 가장 인기 있는(조회수) 순서로 보여드려요! Shorts 영상은 제외 됩니다. 📈
         </p>
         """, unsafe_allow_html=True)
