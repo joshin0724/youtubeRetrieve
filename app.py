@@ -19,12 +19,7 @@ st.set_page_config(layout="wide", page_title="YouTube & Naver Search")
 # 주의: 이 파일은 GitHub 등 공개된 저장소에 올리면 안 됩니다.
 
 # [YouTube API 키 입력]
-# 기존처럼 secrets를 쓰시려면 아래 줄을 주석 처리하고 try-except를 쓰세요.
-# 지금은 하드코딩 예시입니다.
 YOUTUBE_API_KEY = st.secrets["YOUTUBE_API_KEY"]
-
-# [Naver API 키 입력]
-# 'NAVER_CLIENT_ID 또는...' 에러가 안 나도록 try-except 구문을 제거했습니다.
 NAVER_CLIENT_ID = "ilDb5OUSHtH8So32b8G6"
 NAVER_CLIENT_SECRET = "WFuEGiACiQ"
 
@@ -65,7 +60,6 @@ div[data-testid="stMetric"] {
     border-radius: 8px;
     padding: 10px;
 }
-/* [추가됨] HTML 블로그 테이블 스타일 */
 .blog-table {
     width: 100%;
     border-collapse: collapse;
@@ -238,7 +232,7 @@ def search_naver_blogs(search_term):
             
             df = pd.DataFrame(blog_list)
             
-            # 4. 최근 날짜 순으로 정렬 후 임시 컬럼 삭제
+            # 3. 최근 날짜 순으로 정렬 후 임시 컬럼 삭제
             if not df.empty:
                 df = df.sort_values(by='raw_date', ascending=False).drop(columns=['raw_date'])
             
@@ -290,7 +284,6 @@ with main_search:
         </div>
         """, unsafe_allow_html=True)
 
-# [수정 포인트] 실행 조건에 search_term을 추가하여 엔터 입력 시에도 실행되도록 변경
 if run_button or search_term:
     if not search_term:
         if run_button:
@@ -305,8 +298,7 @@ if run_button or search_term:
                 
                 youtube_df = youtube_future.result()
                 naver_df = naver_future.result()
-            
-            # [수정] 다중 예외 키워드 필터링 로직
+                        
             if exclude_term:
                 # 1. 콤마로 분리하고 양쪽 공백 제거 (리스트 생성)
                 exclude_list = [x.strip() for x in exclude_term.split(',') if x.strip()]
@@ -352,7 +344,7 @@ if run_button or search_term:
                         stats_cols[1].metric("좋아요수", like_count)
                         stats_cols[2].metric("구독자수", sub_count)
 
-        # [Tab 2] Naver 블로그 (수정된 부분)
+        # [Tab 2] Naver 블로그 
         with tab2:
             if naver_df.empty:
                 st.info("네이버 블로그 검색 결과가 없습니다 (또는 API 키 확인 필요).")
