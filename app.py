@@ -258,28 +258,43 @@ st.title("🔍 통합 인기 검색 (YouTube & Naver)")
 
 left_space, main_search, right_space = st.columns([1, 3, 1])
 
-with main_search:   
-    search_term = st.text_input(
-        "검색어를 입력하세요:",
-        placeholder="검색어 입력 후 엔터를 누르세요", 
-        key="search_input",
-        label_visibility="collapsed"
-    )
-    # [추가] 예외 키워드 입력창
-    exclude_term = st.text_input(
-        "제외할 키워드를 입력하세요 (선택 사항):",
-        placeholder="제외할 키워드 입력 (예: 은평구)",
-        key="exclude_input",
-        label_visibility="collapsed"
-    )
-    run_button = st.button("통합 검색")
+# -----------------------------------------------
+# 4. 웹페이지 메인 로직
+# -----------------------------------------------
+
+st.title("🔍 통합 인기 검색 (YouTube & Naver)")
+
+# 메인 검색 영역 레이아웃 설정
+left_space, main_search, right_space = st.columns([1, 4, 1])
+
+with main_search:
+    # 1. 검색어와 제외 키워드를 한 줄에 배치 (UX 최적화)
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        search_term = st.text_input(
+            "어떤 키워드를 검색할까요?",
+            placeholder="검색어 입력 후 엔터", 
+            key="search_input"
+        )
+    
+    with col2:
+        exclude_term = st.text_input(
+            "제외할 키워드 (선택)",
+            placeholder="예: 은평구, 홍대",
+            key="exclude_input",
+            help="여러 개인 경우 콤마(,)로 구분해 주세요. 해당 단어가 포함된 결과는 제외됩니다."
+        )
+    
+    # 2. 검색 버튼 중앙 배치 및 스타일링
+    btn_col1, btn_col2, btn_col3 = st.columns([1, 1, 1])
+    with btn_col2:
+        run_button = st.button("🚀 통합 검색 시작", use_container_width=True)
     
     st.markdown("""
-        <p style='text-align: left; font-size: 0.9rem; color: gray;'>
-        ※ 검색어 입력 후 <b>엔터(Enter)</b>를 치거나 <b>통합 검색</b> 버튼을 클릭하세요. </br>
-        ※ 유튜브와 네이버 블로그 최신 데이터를 동시에 가져옵니다. 📈</br>
-        ※ 검색 예외 조건은 여러개를 입력할 수 있습니다. 콤마로 구분해서 넣어주세요. (예를들면 "노트북, 세탁기") </br>
-        </p>
+        <div style='text-align: center; font-size: 0.85rem; color: #888; margin-top: -10px;'>
+        유튜브와 네이버 블로그의 1년 이내 최신 데이터를 필터링하여 보여드립니다.
+        </div>
         """, unsafe_allow_html=True)
 
 # [수정 포인트] 실행 조건에 search_term을 추가하여 엔터 입력 시에도 실행되도록 변경
