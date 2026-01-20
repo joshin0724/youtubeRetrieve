@@ -293,7 +293,8 @@ with main_search:
     
     st.markdown("""
         <div style='text-align: center; font-size: 0.85rem; color: #888; margin-top: -10px;'>
-        유튜브와 네이버 블로그의 1년 이내 최신 데이터를 필터링하여 보여드립니다.
+        유튜브와 네이버 블로그의 1년 이내 최신 데이터를 필터링하여 보여드립니다. </br>
+        유튜브의 경우 조회수 순으로 정렬되어 보여지고, 네이버는 최신순으로 정렬되어 보여집니다.
         </div>
         """, unsafe_allow_html=True)
 
