@@ -256,14 +256,6 @@ def search_naver_blogs(search_term):
 
 st.title("🔍 통합 인기 검색 (YouTube & Naver)")
 
-left_space, main_search, right_space = st.columns([1, 3, 1])
-
-# -----------------------------------------------
-# 4. 웹페이지 메인 로직
-# -----------------------------------------------
-
-st.title("🔍 통합 인기 검색 (YouTube & Naver)")
-
 # 메인 검색 영역 레이아웃 설정
 left_space, main_search, right_space = st.columns([1, 4, 1])
 
