@@ -269,10 +269,14 @@ if run_button:
     else:
         tab1, tab2 = st.tabs(["🎬 YouTube 영상", "📗 네이버 블로그"])
         
-        with st.spinner(f"'{search_term}' 결과를 수집 중입니다..."):
-            # 데이터 수집
-            youtube_df = search_youtube_videos(search_term)
-            naver_df = search_naver_blogs(search_term)
+        with st.spinner(f"'{search_term}' 데이터를 실시간 분석 중입니다..."):
+            # 병렬 실행으로 성능 최적화
+            with concurrent.futures.ThreadPoolExecutor() as executor:
+                youtube_future = executor.submit(search_youtube_videos, search_term)
+                naver_future = executor.submit(search_naver_blogs, search_term)
+                
+                youtube_df = youtube_future.result()
+                naver_df = naver_future.result()
             
         # [Tab 1] YouTube
         with tab1:
