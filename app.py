@@ -277,7 +277,8 @@ with main_search:
     st.markdown("""
         <p style='text-align: left; font-size: 0.9rem; color: gray;'>
         ※ 검색어 입력 후 <b>엔터(Enter)</b>를 치거나 <b>통합 검색</b> 버튼을 클릭하세요. </br>
-        ※ 유튜브와 네이버 블로그 최신 데이터를 동시에 가져옵니다. 📈
+        ※ 유튜브와 네이버 블로그 최신 데이터를 동시에 가져옵니다. 📈</br>
+        ※ 검색 예외 조건은 여러개를 입력할 수 있습니다. 콤마로 구분해서 넣어주세요. (예를들면 "노트북, 세탁기") </br>
         </p>
         """, unsafe_allow_html=True)
 
@@ -296,22 +297,26 @@ if run_button or search_term:
                 
                 youtube_df = youtube_future.result()
                 naver_df = naver_future.result()
-
-            # [추가] 예외 키워드 필터링 로직
+            
+            # [수정] 다중 예외 키워드 필터링 로직
             if exclude_term:
-                # 유튜브 필터링: 제목 또는 채널명에 예외 키워드 포함 시 제외
-                if not youtube_df.empty:
-                    youtube_df = youtube_df[
-                        ~youtube_df['영상 제목'].str.contains(exclude_term, case=False, na=False) & 
-                        ~youtube_df['채널명'].str.contains(exclude_term, case=False, na=False)
-                    ]
+                # 1. 콤마로 분리하고 양쪽 공백 제거 (리스트 생성)
+                exclude_list = [x.strip() for x in exclude_term.split(',') if x.strip()]
                 
-                # 네이버 블로그 필터링: 제목 또는 블로그 이름에 예외 키워드 포함 시 제외
-                if not naver_df.empty:
-                    naver_df = naver_df[
-                        ~naver_df['블로그 제목'].str.contains(exclude_term, case=False, na=False) & 
-                        ~naver_df['블로그 주인(이름)'].str.contains(exclude_term, case=False, na=False)
-                    ]
+                for word in exclude_list:
+                    # 유튜브 필터링: 제목 또는 채널명에 키워드 포함 시 제외
+                    if not youtube_df.empty:
+                        youtube_df = youtube_df[
+                            ~youtube_df['영상 제목'].str.contains(word, case=False, na=False) & 
+                            ~youtube_df['채널명'].str.contains(word, case=False, na=False)
+                        ]
+                    
+                    # 네이버 블로그 필터링: 제목 또는 블로그 이름에 키워드 포함 시 제외
+                    if not naver_df.empty:
+                        naver_df = naver_df[
+                            ~naver_df['블로그 제목'].str.contains(word, case=False, na=False) & 
+                            ~naver_df['블로그 주인(이름)'].str.contains(word, case=False, na=False)
+                        ]
         
             
         # [Tab 1] YouTube
