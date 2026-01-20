@@ -6,6 +6,7 @@ import re
 import urllib.request
 import json
 import html
+import concurrent.futures
 
 # -----------------------------------------------
 # 0. 페이지 설정
