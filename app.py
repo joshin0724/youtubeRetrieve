@@ -258,22 +258,21 @@ st.title("🔍 통합 인기 검색 (YouTube & Naver)")
 
 left_space, main_search, right_space = st.columns([1, 3, 1])
 
-# -----------------------------------------------
-# 4. 웹페이지 메인 로직
-# -----------------------------------------------
-
-st.title("🔍 통합 인기 검색 (YouTube & Naver)")
-
-left_space, main_search, right_space = st.columns([1, 3, 1])
-
 with main_search:   
     search_term = st.text_input(
         "검색어를 입력하세요:",
-        placeholder="검색어 입력 후 엔터를 누르세요",  # 안내 문구 수정
+        placeholder="검색어 입력 후 엔터를 누르세요", 
         key="search_input",
         label_visibility="collapsed"
     )
-    run_button = st.button("통합 검색") 
+    # [추가] 예외 키워드 입력창
+    exclude_term = st.text_input(
+        "제외할 키워드를 입력하세요 (선택 사항):",
+        placeholder="제외할 키워드 입력 (예: 은평구)",
+        key="exclude_input",
+        label_visibility="collapsed"
+    )
+    run_button = st.button("통합 검색")
     
     st.markdown("""
         <p style='text-align: left; font-size: 0.9rem; color: gray;'>
@@ -285,10 +284,9 @@ with main_search:
 # [수정 포인트] 실행 조건에 search_term을 추가하여 엔터 입력 시에도 실행되도록 변경
 if run_button or search_term:
     if not search_term:
-        if run_button: # 아무것도 입력 안 하고 버튼만 눌렀을 때만 경고
+        if run_button:
             st.warning("검색어를 입력해주세요.")
     else:
-        # 이 아래부터는 기존의 tab 설정 및 데이터 출력 로직을 그대로 유지하면 됩니다.
         tab1, tab2 = st.tabs(["🎬 YouTube 영상", "📗 네이버 블로그"])
         
         with st.spinner(f"'{search_term}' 데이터를 실시간 분석 중입니다..."):
@@ -297,7 +295,23 @@ if run_button or search_term:
                 naver_future = executor.submit(search_naver_blogs, search_term)
                 
                 youtube_df = youtube_future.result()
-                naver_df = naver_future.result()     
+                naver_df = naver_future.result()
+
+            # [추가] 예외 키워드 필터링 로직
+            if exclude_term:
+                # 유튜브 필터링: 제목 또는 채널명에 예외 키워드 포함 시 제외
+                if not youtube_df.empty:
+                    youtube_df = youtube_df[
+                        ~youtube_df['영상 제목'].str.contains(exclude_term, case=False, na=False) & 
+                        ~youtube_df['채널명'].str.contains(exclude_term, case=False, na=False)
+                    ]
+                
+                # 네이버 블로그 필터링: 제목 또는 블로그 이름에 예외 키워드 포함 시 제외
+                if not naver_df.empty:
+                    naver_df = naver_df[
+                        ~naver_df['블로그 제목'].str.contains(exclude_term, case=False, na=False) & 
+                        ~naver_df['블로그 주인(이름)'].str.contains(exclude_term, case=False, na=False)
+                    ]
         
             
         # [Tab 1] YouTube
