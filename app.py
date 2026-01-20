@@ -258,10 +258,18 @@ st.title("🔍 통합 인기 검색 (YouTube & Naver)")
 
 left_space, main_search, right_space = st.columns([1, 3, 1])
 
+# -----------------------------------------------
+# 4. 웹페이지 메인 로직
+# -----------------------------------------------
+
+st.title("🔍 통합 인기 검색 (YouTube & Naver)")
+
+left_space, main_search, right_space = st.columns([1, 3, 1])
+
 with main_search:   
     search_term = st.text_input(
         "검색어를 입력하세요:",
-        placeholder="검색어 입력", 
+        placeholder="검색어 입력 후 엔터를 누르세요",  # 안내 문구 수정
         key="search_input",
         label_visibility="collapsed"
     )
@@ -269,25 +277,28 @@ with main_search:
     
     st.markdown("""
         <p style='text-align: left; font-size: 0.9rem; color: gray;'>
-        ※ 버튼 클릭 시 <b>유튜브</b>와 <b>네이버 블로그</b> 결과를 동시에 조회합니다. </br>
-        ※ 유튜브 영상은 검색어와 연관성이 높고, 최근 1년 영상 중 가장 인기 있는(조회수) 순서로 보여드려요! Shorts 영상은 제외 됩니다. 📈
+        ※ 검색어 입력 후 <b>엔터(Enter)</b>를 치거나 <b>통합 검색</b> 버튼을 클릭하세요. </br>
+        ※ 유튜브와 네이버 블로그 최신 데이터를 동시에 가져옵니다. 📈
         </p>
         """, unsafe_allow_html=True)
 
-if run_button:
+# [수정 포인트] 실행 조건에 search_term을 추가하여 엔터 입력 시에도 실행되도록 변경
+if run_button or search_term:
     if not search_term:
-        st.warning("검색어를 입력해주세요.")
+        if run_button: # 아무것도 입력 안 하고 버튼만 눌렀을 때만 경고
+            st.warning("검색어를 입력해주세요.")
     else:
+        # 이 아래부터는 기존의 tab 설정 및 데이터 출력 로직을 그대로 유지하면 됩니다.
         tab1, tab2 = st.tabs(["🎬 YouTube 영상", "📗 네이버 블로그"])
         
         with st.spinner(f"'{search_term}' 데이터를 실시간 분석 중입니다..."):
-            # 병렬 실행으로 성능 최적화
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 youtube_future = executor.submit(search_youtube_videos, search_term)
                 naver_future = executor.submit(search_naver_blogs, search_term)
                 
                 youtube_df = youtube_future.result()
-                naver_df = naver_future.result()
+                naver_df = naver_future.result()     
+        
             
         # [Tab 1] YouTube
         with tab1:
