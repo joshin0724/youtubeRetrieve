@@ -198,12 +198,13 @@ def search_youtube_videos(search_term):
 
 @st.cache_data
 def search_naver_blogs(search_term):
-    # API 키가 하드코딩 되어있는지 확인 (None이거나 비어있으면 실행 안 함)
     if not NAVER_CLIENT_ID or "여기에" in NAVER_CLIENT_ID:
         return pd.DataFrame()
 
     encText = urllib.parse.quote(search_term)
-    url = f"https://openapi.naver.com/v1/search/blog?query={encText}&display=30&sort=sim" 
+    # 1. 최근 순서로 데이터를 가져오기 위해 sort=date로 변경
+    # display는 필터링 후에도 충분한 양을 확보하기 위해 100(최대)으로 설정 권장
+    url = f"https://openapi.naver.com/v1/search/blog?query={encText}&display=100&sort=date" 
     
     request = urllib.request.Request(url)
     request.add_header("X-Naver-Client-Id", NAVER_CLIENT_ID)
@@ -211,29 +212,38 @@ def search_naver_blogs(search_term):
     
     try:
         response = urllib.request.urlopen(request)
-        rescode = response.getcode()
-        
-        if rescode == 200:
-            response_body = response.read()
-            data = json.loads(response_body.decode('utf-8'))
+        if response.getcode() == 200:
+            data = json.loads(response.read().decode('utf-8'))
             
             blog_list = []
+            # 2. 현재 날짜 기준 1년 전 날짜 계산
+            one_year_ago_date = (datetime.now() - timedelta(days=365)).strftime('%Y%m%d')
+            
             for item in data['items']:
-                clean_title = re.sub('<.+?>', '', item['title'])
-                clean_title = html.unescape(clean_title)
-                
-                postdate = item['postdate']
-                formatted_date = f"{postdate[:4]}-{postdate[4:6]}-{postdate[6:]}"
-                
-                blog_list.append({
-                    '블로그 제목': clean_title,
-                    '블로그 주인(이름)': item['bloggername'],
-                    '업로드 일자': formatted_date,
-                    '링크': item['link']
-                })
-            return pd.DataFrame(blog_list)
+                # 3. 1년 이내 데이터인지 확인 (네이버 postdate 형식: YYYYMMDD)
+                if item['postdate'] >= one_year_ago_date:
+                    clean_title = re.sub('<.+?>', '', item['title'])
+                    clean_title = html.unescape(clean_title)
+                    
+                    postdate = item['postdate']
+                    formatted_date = f"{postdate[:4]}-{postdate[4:6]}-{postdate[6:]}"
+                    
+                    blog_list.append({
+                        '블로그 제목': clean_title,
+                        '블로그 주인(이름)': item['bloggername'],
+                        '업로드 일자': formatted_date,
+                        '링크': item['link'],
+                        'raw_date': postdate # 정렬용 임시 컬럼
+                    })
+            
+            df = pd.DataFrame(blog_list)
+            
+            # 4. 최근 날짜 순으로 정렬 후 임시 컬럼 삭제
+            if not df.empty:
+                df = df.sort_values(by='raw_date', ascending=False).drop(columns=['raw_date'])
+            
+            return df
         else:
-            st.error(f"Naver API 호출 에러 코드: {rescode}")
             return pd.DataFrame()
             
     except Exception as e:
