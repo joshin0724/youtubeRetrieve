@@ -196,9 +196,8 @@ def search_naver_blogs(search_term):
         return pd.DataFrame()
 
     encText = urllib.parse.quote(search_term)
-    # 1. 최근 순서로 데이터를 가져오기 위해 sort=date로 변경
-    # display는 필터링 후에도 충분한 양을 확보하기 위해 100(최대)으로 설정 권장
-    url = f"https://openapi.naver.com/v1/search/blog?query={encText}&display=100&sort=date" 
+    # [수정 포인트 1] sort=sim으로 변경하여 연관성(유사도) 높은 데이터를 우선적으로 100개 가져옴
+    url = f"https://openapi.naver.com/v1/search/blog?query={encText}&display=100&sort=sim" 
     
     request = urllib.request.Request(url)
     request.add_header("X-Naver-Client-Id", NAVER_CLIENT_ID)
@@ -214,7 +213,7 @@ def search_naver_blogs(search_term):
             one_year_ago_date = (datetime.now() - timedelta(days=365)).strftime('%Y%m%d')
             
             for item in data['items']:
-                # 3. 1년 이내 데이터인지 확인 (네이버 postdate 형식: YYYYMMDD)
+                # 1년 이내 데이터 필터링 (네이버 postdate 형식: YYYYMMDD)
                 if item['postdate'] >= one_year_ago_date:
                     clean_title = re.sub('<.+?>', '', item['title'])
                     clean_title = html.unescape(clean_title)
@@ -227,12 +226,12 @@ def search_naver_blogs(search_term):
                         '블로그 주인(이름)': item['bloggername'],
                         '업로드 일자': formatted_date,
                         '링크': item['link'],
-                        'raw_date': postdate # 정렬용 임시 컬럼
+                        'raw_date': postdate  # 정렬을 위한 임시 값
                     })
             
             df = pd.DataFrame(blog_list)
             
-            # 3. 최근 날짜 순으로 정렬 후 임시 컬럼 삭제
+            # [수정 포인트 2] 연관성 있게 가져온 100개 데이터 내에서 '최신 날짜순'으로 재정렬
             if not df.empty:
                 df = df.sort_values(by='raw_date', ascending=False).drop(columns=['raw_date'])
             
